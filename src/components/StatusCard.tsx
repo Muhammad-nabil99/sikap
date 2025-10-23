@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight, LucideIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, ArrowRight, LucideIcon, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StatusCardProps {
@@ -20,38 +21,67 @@ export const StatusCard = ({
 }: StatusCardProps) => {
   return (
     <Card className={cn(
-      "p-6 transition-all duration-300 hover:shadow-strong hover:-translate-y-1 animate-slide-in",
-      "bg-gradient-to-br border-2",
-      variant === "success" && "from-emerald-50 to-teal-50 border-emerald-200/50",
-      variant === "info" && "from-blue-50 to-indigo-50 border-blue-200/50"
+      "relative overflow-hidden p-7 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 animate-slide-in border",
+      "bg-card group cursor-pointer",
+      variant === "success" && "hover:border-accent/30",
+      variant === "info" && "hover:border-primary/30"
     )}>
-      <div className="space-y-4">
-        <div className="flex items-start gap-4">
+      {/* Background Gradient Effect */}
+      <div className={cn(
+        "absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-300",
+        variant === "success" && "bg-accent",
+        variant === "info" && "bg-primary"
+      )}></div>
+
+      <div className="relative space-y-5">
+        <div className="flex items-start justify-between gap-4">
           <div className={cn(
-            "p-3 rounded-xl shadow-soft",
-            variant === "success" && "bg-gradient-to-br from-emerald-500 to-teal-500",
-            variant === "info" && "bg-gradient-to-br from-blue-500 to-indigo-500"
+            "p-4 rounded-2xl shadow-md transition-transform duration-300 group-hover:scale-110",
+            variant === "success" && "bg-gradient-to-br from-emerald-500 to-teal-600",
+            variant === "info" && "bg-gradient-to-br from-primary to-blue-600"
           )}>
-            <Icon className="w-6 h-6 text-white" />
+            <Icon className="w-7 h-7 text-white" />
           </div>
+
+          <Badge 
+            variant="outline" 
+            className={cn(
+              "gap-1.5 px-3 py-1",
+              variant === "success" && "border-accent/30 text-accent",
+              variant === "info" && "border-primary/30 text-primary"
+            )}
+          >
+            <Clock className="w-3 h-3" />
+            <span className="text-xs font-semibold">Aktif</span>
+          </Badge>
+        </div>
+        
+        <div className="space-y-3">
+          <h3 className="text-lg font-bold text-foreground leading-snug pr-4">
+            {title}
+          </h3>
           
-          <div className="flex-1 space-y-2">
-            <h3 className="text-lg font-bold text-foreground">{title}</h3>
-            <div className="flex items-center gap-2">
-              <CheckCircle className={cn(
-                "w-5 h-5",
-                variant === "success" && "text-emerald-600",
-                variant === "info" && "text-blue-600"
-              )} />
-              <p className="text-sm text-muted-foreground font-medium">{description}</p>
-            </div>
+          <div className="flex items-start gap-2.5">
+            <CheckCircle className={cn(
+              "w-5 h-5 mt-0.5 flex-shrink-0",
+              variant === "success" && "text-accent",
+              variant === "info" && "text-primary"
+            )} />
+            <p className="text-sm text-muted-foreground font-medium leading-relaxed">
+              {description}
+            </p>
           </div>
         </div>
 
         {showButton && (
-          <Button className="w-full gap-2 bg-gradient-to-r from-primary to-accent hover:shadow-medium transition-all">
+          <Button 
+            className={cn(
+              "w-full gap-2 shadow-md hover:shadow-lg transition-all font-semibold",
+              variant === "info" && "bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+            )}
+          >
             Lihat detail
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         )}
       </div>
