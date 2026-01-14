@@ -2,9 +2,14 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MapPin, Calendar, Award } from "lucide-react";
+import useGetUser from "@/features/user/useGetUser";
+import { shortenName } from "@/utils/helper";
 
 export const WelcomeCard = () => {
-  return (
+  const { user, isLoadingUser } = useGetUser();
+
+  
+  return (  
     <Card className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-primary shadow-xl border-0 animate-scale-in">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
@@ -18,8 +23,8 @@ export const WelcomeCard = () => {
           <div className="relative group">
             <div className="absolute inset-0 bg-white rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity"></div>
             <Avatar className="h-28 w-28 border-4 border-white/30 shadow-2xl relative ring-4 ring-white/20">
-              <AvatarFallback className="bg-gradient-to-br from-white to-blue-100 text-primary text-3xl font-bold">
-                KR
+              <AvatarFallback className="uppercase bg-gradient-to-br from-white to-blue-100 text-primary text-3xl font-bold">
+                {shortenName(user?.data?.nama)}
               </AvatarFallback>
             </Avatar>
             <Badge className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-accent hover:bg-accent text-white border-0 shadow-lg">
@@ -35,14 +40,16 @@ export const WelcomeCard = () => {
                 Selamat Datang Kembali!
               </h2>
               <p className="text-xl font-semibold text-white/90">
-                Kamarudin Raiya, S.Pd., M.AP
+                {user?.data?.nama}
               </p>
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
               <div className="flex items-center gap-2 text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
                 <Calendar className="w-4 h-4" />
-                <span className="text-sm font-medium">NIP: 197208152000031005</span>
+                <span className="text-sm font-medium">
+                  NIP: {user?.data?.nip}
+                </span>
               </div>
               <div className="flex items-center gap-2 text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
                 <MapPin className="w-4 h-4" />

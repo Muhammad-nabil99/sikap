@@ -98,7 +98,14 @@ All colors MUST be HSL.
     --sidebar-ring: 217 91% 60%;
   }
 }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
+/* Hide scrollbar for Firefox */
+.no-scrollbar {
+  scrollbar-width: none;
+}
 @layer base {
   * {
     @apply border-border;

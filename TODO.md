@@ -1,0 +1,4 @@
+- [ ] Fix src/services/user/userAPI.ts: Move credentials to fetch options, rethrow errors in all API functions, remove Authorization from login/register.
+- [ ] Update src/pages/SignUp.tsx: Change nip and nomor inputs to type="number".
+- [ ] Uncomment navigate in src/features/user/useSignUpUser.ts.
+- [ ] Test the register functionality.
