@@ -20,7 +20,7 @@ const menuItems = [
   { id: 2, link: "/sk", icon: User, label: "SK" },
   { id: 3, link: "/berkas", icon: FileText, label: "Berkas" },
   { id: 4, link: "/status", icon: CheckCircle, label: "Cek Status" },
-  { id: 5, link: "/riwayat", icon: History, label: "Riwayat" },
+  { id: 5, link: "/riwayat", icon: History, label: "Arsip" },
   // { id: 6, link: "/profile", icon: UserCircle, label: "Profile" },
 ];
 
