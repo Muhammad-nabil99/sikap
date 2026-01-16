@@ -46,8 +46,9 @@ function BerkasDetail() {
     tanggal_pertek_bkn,
   } = SK?.data?.[0] ?? [];
 
-  const bulanan = masa_gk_bulanan?.split("-")?.[1]?.split("");
-  const shortBulanan = bulanan?.length > 1 ? bulanan?.[1] : bulanan?.[0];
+  // const bulanan = masa_gk_bulanan?.split("-")?.[1]?.split("");
+
+  // const shortBulanan = bulanan?.length > 1 ? bulanan?.[1] : bulanan?.[0];
 
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6">
@@ -118,7 +119,7 @@ function BerkasDetail() {
                 <td className="px-6 py-3 font-medium capitalize">
                   Masa kerja Golongan (Bulan)
                 </td>
-                <td className="px-6 py-3">: {shortBulanan}</td>
+                <td className="px-6 py-3">: {masa_gk_bulanan}</td>
               </tr>
               <tr>
                 <td className="px-6 py-3 font-medium">TMT Golongan</td>

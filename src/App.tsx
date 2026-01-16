@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { DashboardLayout } from "./components/DashboardLayout";
-import Riwayat from "./pages/Riwayat";
+import Arsip from "./pages/Arsip";
 import CekStatus from "./pages/CekStatus";
 import ProgressDocument from "./pages/ProgressDocument";
 import SK from "./pages/SK";
@@ -15,6 +15,9 @@ import Berkas from "./pages/Berkas";
 import BerkasDetail from "./pages/BerkasDetail";
 import CreateBerkas from "./pages/CreateBerkas";
 import CreateSK from "./pages/CreateSK";
+import ProfileForm from "./pages/ProfileForm";
+import Pensiun from "./pages/Pensiun";
+import Berkala from "./pages/Berkala";
 
 const App = () => {
   return (
@@ -50,7 +53,7 @@ const App = () => {
           },
         }}
       />
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ReactQueryDevtools initialIsOpen={false} />
       <TooltipProvider>
         <BrowserRouter>
           <Routes>
@@ -63,9 +66,11 @@ const App = () => {
             >
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Index />} />
-              <Route path="berkas" element={<Berkas />} />
+              <Route path="berkas/kenaikan-pangkat" element={<Berkas />} />
+              <Route path="berkas/berkala" element={<Berkala />} />
+              <Route path="berkas/pensiun" element={<Pensiun />} />
               <Route path="berkas/:id" element={<BerkasDetail />} />
-              <Route
+              <Route  
                 path="berkas/tambah"
                 element={
                   <CreateBerkas isOpen={null} berkas={null} setOpen={null} />
@@ -75,8 +80,8 @@ const App = () => {
               <Route path="sk/tambah" element={<CreateSK />} />
               <Route path="progress" element={<ProgressDocument />} />
               <Route path="status" element={<CekStatus />} />
-              {/* <Route path="profile" element={<ProfileForm />} /> */}
-              <Route path="riwayat" element={<Riwayat />} />
+              <Route path="profile" element={<ProfileForm />} />
+              <Route path="arsip" element={<Arsip />} />
             </Route>
             <Route path="/login" element={<SignIn />} />
             {/* <Route path="/register" element={<SignUp />} /> */}
