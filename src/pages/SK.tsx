@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, PlusCircle, XCircle } from "lucide-react";
+import {  PlusCircle, XCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import useGetSK from "@/features/SK/useGetSK";
@@ -106,87 +106,101 @@ const SK = () => {
   
 
   return (
-    <div className="min-h-screen bg-gray-50 ">
-      <div className="w-full flex justify-end">
-        <NavLink to={"/sk/tambah"}>
-          <Button
-            className={cn(
-              "bg-blue-600 m-auto capitalize w-fit my-2 gap-2 shadow-md hover:shadow-lg transition-all font-semibold"
-            )}
-          >
-            {SK?.data?.length ? "Edit" : "Tambahkan"}
-            <PlusCircle />
-          </Button>
-        </NavLink>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+  
+  <div className="bg-gradient-to-br from-white to-gray-50 shadow-lg border border-gray-200 rounded-2xl p-8 md:p-10">
+    
+    {/* Header Section */}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b-2 border-gray-200 mb-6">
+      <div>
+        <h1 className="font-bold text-3xl text-gray-800 mb-1 capitalize">
+          Data SK
+        </h1>
+        <p className="text-gray-500 text-sm">
+          Informasi Surat Keputusan Pegawai
+        </p>
       </div>
 
-      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-10">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="capitalize text-3xl font-bold text-gray-900">
-            data pegawai
-          </h1>
-          <CheckCircle className="w-7 h-7 text-green-500" />
-        </div>
-
-        <Separator className="mb-6" />
-
-        
-
-        {/* 🔹 Detail SK */}
-        <section className="mt-10 space-y-4">
-          <p className="capitalize">pangkat / golongan ruang / TMT</p>
-          <div className="flex flex-wrap gap-x-2 gap-y-1">
-            {displayFields1.map((item, i) => (
-              <div key={i}>
-                <p
-                  className={`text-gray-900 font-semibold text-sm sm:text-base`}
-                >
-                  {item.value || "-"}{" "}
-                  {item.label.toLowerCase() === "tmt" ? "" : "/"}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-gray-700">
-            {displayFields.map((item, i) => (
-              <div key={i}>
-                <p className="text-gray-600 font-medium capitalize">
-                  {item.label}
-                </p>
-                <p className="text-gray-900 font-semibold ">
-                  {item.value || "-"}
-                </p>
-              </div>
-            ))}
-
-            {/* Pangkat */}
-            <div>
-              <p className="text-gray-600 font-medium">Pangkat</p>
-              <p className="text-gray-900 font-semibold capitalize">
-                {namaPangkat || detailData.pangkat || "-"}
-              </p>
-            </div>
-
-            {/* Gaji Pokok */}
-            {detailData.gaji_pokok > 0 && (
-              <div>
-                <p className="text-gray-600 font-medium">Gaji Pokok</p>
-                <p className="text-gray-900 font-semibold capitalize">
-                  Rp. {detailData.gaji_pokok.toLocaleString("id-ID")}
-                </p>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* <Separator className="my-8" />
-        <p className="text-sm text-gray-500 text-center">
-          Data diambil dari sistem kepegawaian Provinsi Sulawesi Tenggara.
-        </p> */}
-      </div>
+      <NavLink to={"/sk/tambah"}>
+        <Button
+          className={cn(
+            "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800",
+            "text-white px-6 py-2.5 rounded-lg",
+            "shadow-md hover:shadow-xl transition-all duration-300",
+            "font-semibold flex items-center gap-2",
+            "transform hover:-translate-y-0.5 active:translate-y-0 capitalize"
+          )}
+        >
+          <PlusCircle className="w-5 h-5" />
+          <span>{SK?.data?.length ? "Edit" : "Tambahkan"}</span>
+        </Button>
+      </NavLink>
     </div>
+
+    {/* Pangkat/Golongan/TMT Section */}
+    <section className="space-y-4 mb-8">
+      <p className="text-sm uppercase tracking-wide text-gray-500 font-medium">
+        Pangkat / Golongan Ruang / TMT
+      </p>
+      <div className="flex flex-wrap gap-x-2 gap-y-1 bg-white rounded-xl p-4 border border-gray-200">
+        {displayFields1.map((item, i) => (
+          <div key={i}>
+            <p className="text-gray-900 font-semibold text-base sm:text-lg">
+              {item.value || "-"}{" "}
+              {item.label.toLowerCase() === "tmt" ? "" : "/"}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* Detail SK Grid */}
+    <section className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-2">
+        {displayFields.map((item, i) => (
+          <div 
+            key={i}
+            className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
+          >
+            <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2 ">
+              {item.label}
+            </p>
+            <p className="text-gray-900 font-semibold text-base break-words">
+              {item.value || (
+                <span className="text-gray-400 italic">Tidak ada data</span>
+              )}
+            </p>
+          </div>
+        ))}
+
+        {/* Pangkat */}
+        {/* <div className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+          <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2">
+            Pangkat
+          </p>
+          <p className="text-gray-900 font-semibold text-base capitalize break-words">
+            {namaPangkat || detailData.pangkat || (
+              <span className="text-gray-400 italic">Tidak ada data</span>
+            )}
+          </p>
+        </div> */}
+
+        {/* Gaji Pokok */}
+        {detailData.gaji_pokok > 0 && (
+          <div className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+            <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2">
+              Gaji Pokok
+            </p>
+            <p className="text-gray-900 font-semibold text-base break-words">
+              Rp. {detailData.gaji_pokok.toLocaleString("id-ID")}
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+
+  </div>
+</div>
   );
 };
 

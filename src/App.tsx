@@ -11,15 +11,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { Toaster } from "react-hot-toast";
 import SignIn from "./pages/SignIn";
-import Berkas from "./pages/Berkas";
 import BerkasDetail from "./pages/BerkasDetail";
 import CreateBerkas from "./pages/CreateBerkas";
 import CreateSK from "./pages/CreateSK";
-import ProfileForm from "./pages/DataPegawai";
 import Pensiun from "./pages/Pensiun";
 import Berkala from "./pages/Berkala";
 import DataPegawai from "./pages/DataPegawai";
 import CreateDataPegawai from "./pages/CreateDataPegawai";
+import KenaikanPangkat from "./pages/Berkas";
 
 const App = () => {
   return (
@@ -68,7 +67,7 @@ const App = () => {
             >
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Index />} />
-              <Route path="berkas/kenaikan-pangkat" element={<Berkas />} />
+              <Route path="berkas/kenaikan-pangkat" element={<KenaikanPangkat />} />
               <Route path="berkas/berkala" element={<Berkala />} />
               <Route path="berkas/pensiun" element={<Pensiun />} />
               <Route path="berkas/:id" element={<BerkasDetail />} />

@@ -2,6 +2,7 @@ import SKSkeleton from "@/components/SKSkeleton";
 import { Button } from "@/components/ui/button";
 import useGetUser from "@/features/user/useGetUser";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { PlusCircle } from "lucide-react";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { NavLink } from "react-router-dom";
@@ -60,6 +61,8 @@ const DataPegawai: React.FC = () => {
       { label: "Alamat", value: userData?.alamat },
       { label: "unit kerja", value: 'kebudayaan' },
     ];
+
+
 
     if (isLoadingUser) return <SKSkeleton />;
   return (
@@ -164,38 +167,58 @@ const DataPegawai: React.FC = () => {
         </div>
       </form>
     </div> */}
-    <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-10">
-     
-   <section className="space-y-4">
-          <div className="flex items-center justify-between">
+    <div className="bg-gradient-to-br from-white to-gray-50 shadow-sm border border-gray-200 rounded-2xl p-8 md:p-10">
+  
+  <section className="space-y-6 capitalize">
+    {/* Header Section */}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b-2 border-gray-200">
+      <div>
+        <h2 className="font-bold text-3xl text-gray-800 mb-1">
+          Data Pegawai
+        </h2>
+        <p className="text-gray-500 text-sm">
+          Informasi lengkap pegawai
+        </p>
+      </div>
+      
+      <NavLink to={"/data-pegawai/tambah"}>
+        <Button
+          className={cn(
+            "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800",
+            "text-white px-6 py-2.5 rounded-lg",
+            "shadow-md hover:shadow-xl transition-all duration-300",
+            "font-semibold flex items-center gap-2",
+            "transform hover:-translate-y-0.5 active:translate-y-0"
+          )}
+        >
+          <PlusCircle className="w-5 h-5" />
+          <span>Edit</span>
+        </Button>
+      </NavLink>
+    </div>
 
-          <h2 className=" capitalize text-xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-3">
-            data Pegawai
-          </h2>
-          <div className="w-fit flex justify-end">
-                    <NavLink to={"/data-pegawai/tambah"}>
-                      <Button
-                        className={cn(
-                          "bg-blue-600 m-auto capitalize w-fit my-2 gap-2 shadow-md hover:shadow-lg transition-all font-semibold"
-                        )}
-                      >
-                        Edit
-                        <PlusCircle />
-                      </Button>
-                    </NavLink>
-                  </div>
-          </div>
-          <div className="capitalize grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-gray-700">
-            {userFields.map((item, i) => (
-              <div key={i}>
-                <p className="text-gray-600 font-medium">{item.label}</p>
-                <p className="text-gray-900 font-semibold">
-                  {item.value || "-"}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section> </div> 
+    {/* Data Grid Section */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-2">
+      {userFields.map((item, i) => (
+        <div 
+          key={i} 
+          className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
+        >
+          <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2 flex items-center gap-2">
+            {item.label}
+          </p>
+          <p className="text-gray-900 font-semibold text-base break-words">
+            {item.value || (
+              <span className="text-gray-400 italic">Tidak ada data</span>
+            )}
+          </p>
+        </div>
+      ))}
+    </div>
+
+  </section>
+  
+</div>
    </>
        
     

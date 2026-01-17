@@ -26,16 +26,59 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import favicon from "@/assets/favicon.ico";
+import useGetUser from "@/features/user/useGetUser";
 
-const menuItems = [
-  { id: 1, link: "/dashboard", icon: Home, label: "Dashboard" },
-  { id: 6, link: "/data-pegawai", icon: UserCircle, label: "data pegawai" },
+
+
+export const Sidebar = () => {
+  const {user,isLoadingUser} =   useGetUser();
+  
+  
+const data = {
+  agama: "islam",
+  alamat: "wolasi",
+  created_at: "2025-11-07T13:18:47.000000Z",
+  email: "Masri@gmail.com",
+  id: 0,
+  jenis_kelamin: "perempuan",
+  nama: "Masri Wati, SE. M.Si",
+  nip: "198912312021111",
+  nomor: "6285280832326",
+  tanggal_lahir: "2005-01-01",
+  tempat_lahir: "",
+  updated_at: "2025-11-07T13:18:47.000000Z",
+};
+
+const REQUIRED_FIELDS = [
+  "nama",
+  "nip",
+  "email",
+  "agama",
+  "jenis_kelamin",
+  "alamat",
+  "tempat_lahir",
+  "tanggal_lahir",
+  "nomor",
+];
+const hasEmptyUserData = REQUIRED_FIELDS.some((key) => {
+  const value = user?.data[key];
+  return (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    (typeof value === "string" && value.trim() === "")
+  );
+});
+
+
+  const menuItems = [
+  { id: 1, link: "/dashboard", icon: Home, label: "Dashboard", },
+  { id: 6, link: "/data-pegawai", icon: UserCircle, label: "data pegawai", alert: hasEmptyUserData, },
   {
     id: 2,
     link: "/sk",
     icon: User,
     label: "SK",
-    
   },
   { id: 3, link: "/berkas", icon: FileText, label: "Berkas", children: [
       { id: 11, link: "/berkas/pensiun", icon: HandCoins, label: "Pensiun" },
@@ -45,12 +88,11 @@ const menuItems = [
         link: "/berkas/kenaikan-pangkat",
         icon: ArrowUpRight ,
         label: "Kenaikan Pangkat",
+      
       },
     ],},
   { id: 5, link: "/arsip", icon: History, label: "Arsip" },
 ];
-
-export const Sidebar = () => {
   const { setOpenMobile, isMobile, open } = useSidebar();
   const location = useLocation();
 
@@ -146,6 +188,9 @@ export const Sidebar = () => {
                         <span className="capitalize flex-1 text-left text-sm font-medium">
                           {item.label}
                         </span>
+                        { item.alert && <div className="p-1 rounded-full bg-yellow-100 animate-blink">
+                          <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        </div>}
                       </NavLink>
                     )}
 

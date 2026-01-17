@@ -10,7 +10,7 @@ import { DocumentKP } from "@/services/Berkas/berkasAPI";
 import BerkasSkeleton from "@/components/BerkasSkeleton";
 import { useDataContext } from "@/context/useDataContext";
 
-function Berkas() {
+function KenaikanPangkat() {
   const { infoSubmission } = useDataContext();
   const isSubmissionOpen = infoSubmission();
 
@@ -90,13 +90,13 @@ function Berkas() {
         <table className="w-full text-sm text-gray-700">
           <thead className="bg-blue-50 text-gray-700 text-xs uppercase tracking-wider">
             <tr>
-              <th className="px-4 lg:px-6 py-3 text-center">SK PNS</th>
               <th className="px-4 lg:px-6 py-3 text-center">SK CPNS</th>
-              <th className="px-4 lg:px-6 py-3 text-center">SK Gaji Berkala</th>
-              <th className="px-4 lg:px-6 py-3 text-center">SK Jabatan</th>
+              <th className="px-4 lg:px-6 py-3 text-center">SK PNS</th>
               <th className="px-4 lg:px-6 py-3 text-center">
                 SK Pangkat Terakhir
               </th>
+              <th className="px-4 lg:px-6 py-3 text-center">SK Gaji Berkala</th>
+              <th className="px-4 lg:px-6 py-3 text-center">SK Jabatan</th>
               <th className="px-4 lg:px-6 py-3 text-center">Detail</th>
             </tr>
           </thead>
@@ -108,6 +108,15 @@ function Berkas() {
               >
                 <td className="px-4 lg:px-6 py-3 text-center">
                   <a
+                    href={`${BASE_DOCUMENT}/${item.sk_cpns}`}
+                    target="_blank"
+                    className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-blue-700 transition inline-block"
+                  >
+                    Lihat Dokumen
+                  </a>
+                </td>
+                <td className="px-4 lg:px-6 py-3 text-center">
+                  <a
                     href={`${BASE_DOCUMENT}/${item.sk_pns}`}
                     target="_blank"
                     className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-blue-700 transition inline-block"
@@ -117,7 +126,7 @@ function Berkas() {
                 </td>
                 <td className="px-4 lg:px-6 py-3 text-center">
                   <a
-                    href={`${BASE_DOCUMENT}/${item.sk_cpns}`}
+                    href={`${BASE_DOCUMENT}/${item.sk_pangkat_terakhir}`}
                     target="_blank"
                     className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-blue-700 transition inline-block"
                   >
@@ -142,15 +151,7 @@ function Berkas() {
                     Lihat Dokumen
                   </a>
                 </td>
-                <td className="px-4 lg:px-6 py-3 text-center">
-                  <a
-                    href={`${BASE_DOCUMENT}/${item.sk_pangkat_terakhir}`}
-                    target="_blank"
-                    className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium hover:bg-blue-700 transition inline-block"
-                  >
-                    Lihat Dokumen
-                  </a>
-                </td>
+                
                 <td className="px-4 lg:px-6 py-3 text-center">
                   <Link
                     to={`/berkas/${item.id}`}
@@ -258,4 +259,4 @@ function Berkas() {
   );
 }
 
-export default Berkas;
+export default KenaikanPangkat;

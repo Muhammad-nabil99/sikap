@@ -32,8 +32,14 @@ function BerkasDetail() {
     pegawais_id,
     file_sk,
     status,
+    // sk_cpns
+    // ,sk_pns
+    // ,sk_gaji_berkala
+    // ,sk_pangkat_terakhir
+    // ,sk_jabatan,
     ...document
   } = findBerkas;
+
 
   const {
     nomor_sk,
@@ -183,6 +189,7 @@ function BerkasDetail() {
               {Object?.entries(document)?.map(([key, value]) => {
                 if (typeof value !== "string" || !value.includes("berkas"))
                   return null;
+                  
 
                 const formattedKey = key.replace(/_/g, " ").toUpperCase();
 
@@ -194,11 +201,11 @@ function BerkasDetail() {
                         <input
                           type="file"
                           className="block w-40 text-xs text-gray-600
-              file:mr-3 file:px-3
-              file:rounded-full file:border-0
-              file:text-xs file:font-medium
-              file:bg-blue-50 file:text-gray-800
-              hover:file:bg-blue-100"
+                        file:mr-3 file:px-3
+                        file:rounded-full file:border-0
+                        file:text-xs file:font-medium
+                        file:bg-blue-50 file:text-gray-800
+                        hover:file:bg-blue-100"
                         />
                       )}
 

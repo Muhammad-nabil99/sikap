@@ -265,9 +265,9 @@ const CreateSK = () => {
           <SelectValue placeholder="Pilih bulan" />
         </SelectTrigger>
         <SelectContent>
-          {[...Array(12)].map((_, i) => (
-            <SelectItem key={i + 1} value={(i + 1).toString()}>
-              {i + 1}
+          {[...Array(13)].map((_, i) => (
+            <SelectItem key={i} value={(i).toString()}>
+              {i}
             </SelectItem>
           ))}
         </SelectContent>
