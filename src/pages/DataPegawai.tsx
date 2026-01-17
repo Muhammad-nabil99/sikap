@@ -1,4 +1,10 @@
+import SKSkeleton from "@/components/SKSkeleton";
+import { Button } from "@/components/ui/button";
+import useGetUser from "@/features/user/useGetUser";
+import { cn } from "@/lib/utils";
+import { PlusCircle } from "lucide-react";
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import { NavLink } from "react-router-dom";
 
 interface ProfileFormData {
   name: string;
@@ -7,7 +13,9 @@ interface ProfileFormData {
   avatar: string | null;
 }
 
-const ProfileForm: React.FC = () => {
+const DataPegawai: React.FC = () => {
+  const { user, isLoadingUser } = useGetUser();
+  const userData = user?.data;
   const [formData, setFormData] = useState<ProfileFormData>({
     name: "",
     email: "",
@@ -37,21 +45,37 @@ const ProfileForm: React.FC = () => {
     console.log("Profile Updated:", formData);
   };
 
-  return (
-    <div className="max-w-2xl mx-auto p-8 bg-white rounded-2xl border border-gray-100">
-      {/* Header */}
-      <div className="mb-8 border-b pb-4">
-        <h1 className="text-2xl font-semibold text-gray-800">Ubah Profil</h1>
-        <p className="capitalize text-gray-500 text-sm mt-1">
-          Perbaruhi data diri data pengaturan akun.
-        </p>
-      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Avatar Upload */}
-        <div className="flex items-center gap-4">
-          <div className="relative w-20 h-20">
-            <img
+  const userFields = [
+      { label: "Nama", value: userData?.nama },
+      { label: "NIP", value: userData?.nip },
+      { label: "Email", value: userData?.email },
+      { label: "Nomor Telepon", value: userData?.nomor },
+      { label: "Agama", value: userData?.agama },
+      { label: "Jenis Kelamin", value: userData?.jenis_kelamin },
+      {
+        label: "Tempat, Tanggal Lahir",
+        value: `${userData?.tempat_lahir}, ${userData?.tanggal_lahir}`,
+      },
+      { label: "Alamat", value: userData?.alamat },
+      { label: "unit kerja", value: 'kebudayaan' },
+    ];
+
+    if (isLoadingUser) return <SKSkeleton />;
+  return (
+   <> 
+    {/* <div className="max-w-2xl mx-auto p-8 bg-white rounded-2xl border border-gray-100">
+       <div className="mb-8 border-b pb-4">
+         <h1 className="text-2xl font-semibold text-gray-800">Ubah Profil</h1>
+         <p className="capitalize text-gray-500 text-sm mt-1">
+           Perbaruhi data diri data pengaturan akun.
+         </p>
+       </div>
+
+       <form onSubmit={handleSubmit} className="space-y-6">
+         <div className="flex items-center gap-4">
+           <div className="relative w-20 h-20">
+             <img
               src={preview || "https://via.placeholder.com/150"}
               alt="Avatar"
               className="w-20 h-20 object-cover rounded-full border border-gray-200 shadow-sm"
@@ -92,7 +116,6 @@ const ProfileForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Name Field */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">Nama</label>
           <input
@@ -105,7 +128,6 @@ const ProfileForm: React.FC = () => {
           />
         </div>
 
-        {/* Email Field */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">Email</label>
           <input
@@ -118,7 +140,6 @@ const ProfileForm: React.FC = () => {
           />
         </div>
 
-        {/* Password Field */}
         <div>
           <label className="block text-gray-700 font-medium mb-1">
             Password
@@ -133,7 +154,6 @@ const ProfileForm: React.FC = () => {
           />
         </div>
 
-        {/* Submit Button */}
         <div className="pt-2">
           <button
             type="submit"
@@ -143,8 +163,43 @@ const ProfileForm: React.FC = () => {
           </button>
         </div>
       </form>
-    </div>
+    </div> */}
+    <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-10">
+     
+   <section className="space-y-4">
+          <div className="flex items-center justify-between">
+
+          <h2 className=" capitalize text-xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-3">
+            data Pegawai
+          </h2>
+          <div className="w-fit flex justify-end">
+                    <NavLink to={"/data-pegawai/tambah"}>
+                      <Button
+                        className={cn(
+                          "bg-blue-600 m-auto capitalize w-fit my-2 gap-2 shadow-md hover:shadow-lg transition-all font-semibold"
+                        )}
+                      >
+                        Edit
+                        <PlusCircle />
+                      </Button>
+                    </NavLink>
+                  </div>
+          </div>
+          <div className="capitalize grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-gray-700">
+            {userFields.map((item, i) => (
+              <div key={i}>
+                <p className="text-gray-600 font-medium">{item.label}</p>
+                <p className="text-gray-900 font-semibold">
+                  {item.value || "-"}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section> </div> 
+   </>
+       
+    
   );
 };
 
-export default ProfileForm;
+export default DataPegawai;

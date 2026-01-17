@@ -15,9 +15,11 @@ import Berkas from "./pages/Berkas";
 import BerkasDetail from "./pages/BerkasDetail";
 import CreateBerkas from "./pages/CreateBerkas";
 import CreateSK from "./pages/CreateSK";
-import ProfileForm from "./pages/ProfileForm";
+import ProfileForm from "./pages/DataPegawai";
 import Pensiun from "./pages/Pensiun";
 import Berkala from "./pages/Berkala";
+import DataPegawai from "./pages/DataPegawai";
+import CreateDataPegawai from "./pages/CreateDataPegawai";
 
 const App = () => {
   return (
@@ -80,7 +82,8 @@ const App = () => {
               <Route path="sk/tambah" element={<CreateSK />} />
               <Route path="progress" element={<ProgressDocument />} />
               <Route path="status" element={<CekStatus />} />
-              <Route path="profile" element={<ProfileForm />} />
+              <Route path="data-pegawai" element={<DataPegawai />} />
+              <Route path="data-pegawai/tambah" element={<CreateDataPegawai />} />
               <Route path="arsip" element={<Arsip />} />
             </Route>
             <Route path="/login" element={<SignIn />} />

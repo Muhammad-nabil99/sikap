@@ -8,9 +8,10 @@ import {
   ChevronDown,
   HandCoins,
   TrendingUp,
+  ArrowUpRight
 } from "lucide-react";
-import { useState } from "react";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import {
@@ -28,6 +29,7 @@ import favicon from "@/assets/favicon.ico";
 
 const menuItems = [
   { id: 1, link: "/dashboard", icon: Home, label: "Dashboard" },
+  { id: 6, link: "/data-pegawai", icon: UserCircle, label: "data pegawai" },
   {
     id: 2,
     link: "/sk",
@@ -35,14 +37,13 @@ const menuItems = [
     label: "SK",
     
   },
-  { id: 6, link: "/profile", icon: UserCircle, label: "Profile" },
   { id: 3, link: "/berkas", icon: FileText, label: "Berkas", children: [
       { id: 11, link: "/berkas/pensiun", icon: HandCoins, label: "Pensiun" },
       { id: 22, link: "/berkas/berkala", icon: TrendingUp, label: "Berkala" },
       {
         id: 33,
         link: "/berkas/kenaikan-pangkat",
-        icon: TrendingUp,
+        icon: ArrowUpRight ,
         label: "Kenaikan Pangkat",
       },
     ],},
@@ -142,7 +143,7 @@ export const Sidebar = () => {
                         )}
                       >
                         <item.icon className="w-5 h-5" />
-                        <span className="flex-1 text-left text-sm font-medium">
+                        <span className="capitalize flex-1 text-left text-sm font-medium">
                           {item.label}
                         </span>
                       </NavLink>

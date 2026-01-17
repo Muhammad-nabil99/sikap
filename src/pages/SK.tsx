@@ -5,12 +5,9 @@ import { CheckCircle, PlusCircle, XCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import useGetSK from "@/features/SK/useGetSK";
-import useGetUser from "@/features/user/useGetUser";
 import SKSkeleton from "@/components/SKSkeleton";
 import {
   golonganRuang,
-  listGolonganRuang,
-  updateGolonganRuang,
 } from "@/utils/helper";
 
 export interface SKData {
@@ -38,14 +35,12 @@ export interface SKData {
 
 const SK = () => {
   const { SK, isLoadingSK } = useGetSK();
-  const { user, isLoadingUser } = useGetUser();
 
-  if (isLoadingSK || isLoadingUser) return <SKSkeleton />;
+  if (isLoadingSK) return <SKSkeleton />;
 
   const detailData: SKData | undefined = SK?.data?.[0];
   const { pangkat: namaPangkat } = golonganRuang(detailData?.golongan_ruang);
 
-  const userData = user?.data;
 
   if (!detailData) {
     return (
@@ -108,19 +103,7 @@ const SK = () => {
     { label: "Tanggal Pertek BKN", value: detailData.tanggal_pertek_bkn },
   ];
 
-  const userFields = [
-    { label: "Nama", value: userData?.nama },
-    { label: "NIP", value: userData?.nip },
-    { label: "Email", value: userData?.email },
-    { label: "Nomor Telepon", value: userData?.nomor },
-    { label: "Agama", value: userData?.agama },
-    { label: "Jenis Kelamin", value: userData?.jenis_kelamin },
-    {
-      label: "Tempat, Tanggal Lahir",
-      value: `${userData?.tempat_lahir}, ${userData?.tanggal_lahir}`,
-    },
-    { label: "Alamat", value: userData?.alamat },
-  ];
+  
 
   return (
     <div className="min-h-screen bg-gray-50 ">
@@ -140,36 +123,18 @@ const SK = () => {
       <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Detail SK Kenaikan Pangkat
+          <h1 className="capitalize text-3xl font-bold text-gray-900">
+            data pegawai
           </h1>
           <CheckCircle className="w-7 h-7 text-green-500" />
         </div>
 
         <Separator className="mb-6" />
 
-        {/* 🔹 Informasi Pegawai */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-3">
-            Informasi Pegawai
-          </h2>
-          <div className="capitalize grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-gray-700">
-            {userFields.map((item, i) => (
-              <div key={i}>
-                <p className="text-gray-600 font-medium">{item.label}</p>
-                <p className="text-gray-900 font-semibold">
-                  {item.value || "-"}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        
 
         {/* 🔹 Detail SK */}
         <section className="mt-10 space-y-4">
-          <h2 className="text-xl font-semibold text-gray-800 border-l-4 border-green-500 pl-3">
-            Detail SK
-          </h2>
           <p className="capitalize">pangkat / golongan ruang / TMT</p>
           <div className="flex flex-wrap gap-x-2 gap-y-1">
             {displayFields1.map((item, i) => (
@@ -216,10 +181,10 @@ const SK = () => {
           </div>
         </section>
 
-        <Separator className="my-8" />
+        {/* <Separator className="my-8" />
         <p className="text-sm text-gray-500 text-center">
           Data diambil dari sistem kepegawaian Provinsi Sulawesi Tenggara.
-        </p>
+        </p> */}
       </div>
     </div>
   );

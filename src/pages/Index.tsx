@@ -27,11 +27,11 @@ const Index = () => {
           description="Pengumpulan dokumen Kenaikan Pangkat sudah ditutup. Proses selanjutnya akan segera dimulai."
           icon={FileWarning}
           variant="danger"
-          linkedTo={null}
+          linkedTo={null} 
           date={SK?.data?.[0]?.tmt_golongan}
         />
       );
-    }
+    } 
     if (getNewsBerkas?.length) {
       return (
         <StatusCard
