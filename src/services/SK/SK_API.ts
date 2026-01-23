@@ -7,9 +7,9 @@ export interface SK {
 }
 export interface Data {
   tmt_golongan: string;
-  masa_gk_bulan: string;
+  masa_gk_bulanan: string;
   golongan_ruang: string;
-  masa_gk_tahun: string;
+  masa_gk_tahunan: number;
   tanggal_lahir: string;
   nomor_sk: string;
   jenis_kp: string;
@@ -20,9 +20,9 @@ export interface Data {
 
 export interface CreateSKData {
   tmt_golongan: string;
-  masa_gk_bulan: string;
+  masa_gk_bulanan: string;
   golongan_ruang: string;
-  masa_gk_tahun: string;
+  masa_gk_tahunan: number;
   nomor_sk: string;
   jenis_kp: string;
   tanggal_sk: string;
@@ -37,7 +37,7 @@ export async function getSK_API() {
   if (!getToken) return null;
   const token = JSON.parse(getToken);
   try {
-    const response = await fetch(`${BASE_URL}/pegawai/data-diri`, {
+    const response = await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -58,7 +58,7 @@ export async function deleteSK_API(id: number) {
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
-    await fetch(`${BASE_URL}/pegawai/data-diri/${id}`, {
+    await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri/${id}`, {
       method: "DELETE",
       credentials: "include",
       headers: {
@@ -71,11 +71,10 @@ export async function deleteSK_API(id: number) {
   }
 }
 export async function updateSK_API(newData) {
-
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
-    await fetch(`${BASE_URL}/pegawai/data-diri/${newData?.id}`, {
+    await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri/${newData?.id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -89,13 +88,14 @@ export async function updateSK_API(newData) {
   }
 }
 export async function createSK_API(newData: CreateSKData) {
+  
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
 
   try {
-    const response = await fetch(`${BASE_URL}/pegawai/data-diri`, {
+    const response = await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri`, {
       method: "POST",
-      credentials : "include",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

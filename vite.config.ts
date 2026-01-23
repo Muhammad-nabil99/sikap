@@ -10,14 +10,14 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       "/api": {
-        target: "https://dashboard.btikpsultra.my.id",
+        target: "https://dashboardsikap.btikpsultra.my.id",
         changeOrigin: true,
         secure: false,
       },
     },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(
-    Boolean
+    Boolean,
   ),
   resolve: {
     alias: {

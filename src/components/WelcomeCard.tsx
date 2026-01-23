@@ -39,7 +39,7 @@ export const WelcomeCard = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 Selamat Datang Kembali!
               </h2>
-              <p className="text-xl font-semibold text-white/90">
+              <p className="capitalize text-xl font-semibold text-white/90">
                 {user?.data?.nama}
               </p>
             </div>

@@ -1,5 +1,4 @@
-import { BASE_URL } from "@/utils/config";
-import { NewUser } from "../user/userAPI";
+import { NewUser } from "../../user/userAPI";
 
 export interface InputBerkas {
   id: number;
@@ -28,19 +27,22 @@ export interface DocumentKP {
   sk_pangkat_terakhir: string;
 }
 
-export async function getBerkas_API<BERKAS_TYPE>() {
+export async function GET_BERKAS_KENAIKAN_PANGKAT_PNS_API<BERKAS_TYPE>() {
   const getToken = localStorage.getItem("token");
   if (!getToken) return [];
   const token = JSON.parse(getToken);
   try {
-    const response = await fetch(`${BASE_URL}/pegawai/berkas`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+    const response = await fetch(
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pns`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
       },
-      credentials: "include",
-    });
+    );
     if (!response.ok)
       throw new Error("Failed to retrive data kenaikan pangkat");
     const data = await response.json();
@@ -51,52 +53,47 @@ export async function getBerkas_API<BERKAS_TYPE>() {
     return [];
   }
 }
-export async function deleteBerkas_API(id: number) {
+export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(
+  id: number,
+  formData: FormData,
+) {
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
-    await fetch(`${BASE_URL}/pegawai/berkas/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  } catch (error) {
-    console.log("tidak dapat menghapus data kenaikan pangkat");
-  }
-}
-export async function updateBerkas_API(id: number, formData: FormData) {
-  const getToken = localStorage.getItem("token");
-  const token = JSON.parse(getToken);
-  try {
-    await fetch(`${BASE_URL}/pegawai/berkas/${id}/update`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    await fetch(
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pns/update`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
 
-      body: formData,
-    });
+        body: formData,
+      },
+    );
   } catch (error) {
     console.log("tidak dapat mengedit data kenaikan pangkat");
   }
 }
-export async function createBerkas_API(formData: FormData) {
+export async function CREATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(
+  formData: FormData,
+) {
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
-    const response = await fetch(`${BASE_URL}/pegawai/berkas`, {
-      method: "POST",
+    const response = await fetch(
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pns`,
+      {
+        method: "POST",
 
-      headers: {
-        Authorization: `Bearer ${token}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: formData,
       },
-      credentials: "include",
-      body: formData,
-    });
+    );
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Failed to create data kenaikan pangkat: ${errorText}`);
@@ -104,7 +101,7 @@ export async function createBerkas_API(formData: FormData) {
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       throw new Error(
-        "Server returned non-JSON response. Check authentication or server status."
+        "Server returned non-JSON response. Check authentication or server status.",
       );
     }
     const data = await response.json();

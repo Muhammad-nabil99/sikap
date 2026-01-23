@@ -18,7 +18,8 @@ import Pensiun from "./pages/Pensiun";
 import Berkala from "./pages/Berkala";
 import DataPegawai from "./pages/DataPegawai";
 import CreateDataPegawai from "./pages/CreateDataPegawai";
-import KenaikanPangkat from "./pages/Berkas";
+import KenaikanPangkat from "./pages/KenaikanPangkat";
+import SignUp from "./pages/SignUp";
 
 const App = () => {
   return (
@@ -86,7 +87,7 @@ const App = () => {
               <Route path="arsip" element={<Arsip />} />
             </Route>
             <Route path="/login" element={<SignIn />} />
-            {/* <Route path="/register" element={<SignUp />} /> */}
+            <Route path="/register" element={<SignUp />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

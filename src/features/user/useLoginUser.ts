@@ -10,6 +10,7 @@ function useLoginUser() {
     mutationFn: loginUserAPI,
     onSuccess: (user) => {
       const { token } = user;
+      
       localStorage.setItem("token", JSON.stringify(token));
       toast.success("Berhasil Login");
       queryClient.setQueryData(["user"], user);

@@ -7,16 +7,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Lock, Mail, Eye, EyeOff } from "lucide-react";
 import useLoginUser from "@/features/user/useLoginUser";
 import favicon from "@/assets/favicon.ico";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
+  const [nip, setNip] = useState("");
   const [password, setPassword] = useState("");
   const { login, isPending } = useLoginUser();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login({ email, password });
+    login({ nip, password });
   };
 
   return (
@@ -37,19 +38,18 @@ const SignIn = () => {
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Input */}
+            {/* nip Input */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700 font-medium">
-                Email
+              <Label htmlFor="nip" className="text-gray-700 font-medium">
+                Nip
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
-                  onChange={({ target }) => setEmail(target.value)}
-                  id="email"
-                  type="email"
-                  placeholder="nama@email.com"
-                  className="pl-10 h-12 bg-gray-50 border-gray-200 focus:border-primary focus:ring-primary"
+                  onChange={({ target }) => setNip(target.value)}
+                  id="nip"
+                  type="number"
+                  placeholder="Contoh: 19894858393922"
+                  className="h-12 bg-gray-50 border-gray-200 focus:border-primary focus:ring-primary"
                   required
                 />
               </div>
@@ -119,7 +119,7 @@ const SignIn = () => {
               )}
             </Button>
           </form>
-          {/* <p className="text-center text-sm text-gray-600 mt-6">
+          <p className="text-center text-sm text-gray-600 mt-6">
             Belum punya akun?{" "}
             <Link
               to="/register"
@@ -127,7 +127,7 @@ const SignIn = () => {
             >
               Daftar sekarang
             </Link>
-          </p> */}
+          </p>
         </div>
 
         <div className="text-center py-5 text-black/50 text-xs">

@@ -11,6 +11,8 @@ function useCreateSK() {
     onSuccess: () => {
       toast.success("Berhasil menambahkan");
       navigate("/sk");
+      console.log('testing');
+      
       queryClient.invalidateQueries({ queryKey: ["sk"] });
     },
     onError: (error) => {

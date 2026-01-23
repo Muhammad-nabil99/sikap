@@ -4,11 +4,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Pencil, Trash } from "lucide-react";
 import { SkeletonBerkasDetail } from "@/components/SkeletonBerkasDetail";
-import useGetDataKP from "@/features/berkas/useGetDataBerkas";
+import useGetDataKP from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
 import { BASE_DOCUMENT } from "@/utils/config";
 import CreateBerkas from "./CreateBerkas";
 import useGetSK from "@/features/SK/useGetSK";
-import useDeleteBerkas from "@/features/berkas/useDeleteBerkas";
 import { listGolonganRuang, updateGolonganRuang } from "@/utils/helper";
 
 function BerkasDetail() {
@@ -16,15 +15,21 @@ function BerkasDetail() {
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
   const [open, setOpen] = useState(false);
-  const { onDeleteBerkas, isDeletingBerkas } = useDeleteBerkas();
-  const { berkas, isLoadingBerkas } = useGetDataKP();
+  // const { berkas, isLoadingBerkas } = useGetDataKP();
   const { SK, isLoadingSK } = useGetSK();
-  const isLoading = isDeletingBerkas || isLoadingBerkas || isLoadingSK;
+  // const isLoading =  isLoadingBerkas || isLoadingSK;
 
-  if (isLoading) return <SkeletonBerkasDetail />;
+  // if (isLoading) return <SkeletonBerkasDetail />;
 
-  const findBerkas = berkas?.data?.find((item) => item?.id == id);
-
+  // const findBerkas = berkas?.data?.find((item) => item?.id == id);
+  const findBerkas = {
+    created_at: "",
+    users_id: "",
+    pegawai: "",
+    pegawais_id: "",
+    file_sk: "",
+    status: "",
+  };
   const {
     created_at,
     users_id,
@@ -39,7 +44,6 @@ function BerkasDetail() {
     // ,sk_jabatan,
     ...document
   } = findBerkas;
-
 
   const {
     nomor_sk,
@@ -82,7 +86,6 @@ function BerkasDetail() {
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
           <Button
-            onClick={() => onDeleteBerkas(id)}
             variant="destructive"
             className="flex items-center gap-2 bg-red-600 hover:bg-red-700"
           >
@@ -92,7 +95,7 @@ function BerkasDetail() {
           <Button
             onClick={() => setOpen((prev) => !prev)}
             className={cn(
-              "flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white"
+              "flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white",
             )}
           >
             {edit ? "Batal Edit" : "Edit"}
@@ -189,7 +192,6 @@ function BerkasDetail() {
               {Object?.entries(document)?.map(([key, value]) => {
                 if (typeof value !== "string" || !value.includes("berkas"))
                   return null;
-                  
 
                 const formattedKey = key.replace(/_/g, " ").toUpperCase();
 
@@ -226,7 +228,7 @@ function BerkasDetail() {
       </form>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black/50 backdrop-blur-sm">
-          <CreateBerkas berkas={berkas} isOpen={open} setOpen={setOpen} />
+          <CreateBerkas berkas={""} isOpen={open} setOpen={setOpen} />
         </div>
       )}
     </div>

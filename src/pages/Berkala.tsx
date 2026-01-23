@@ -4,9 +4,9 @@ import { BASE_DOCUMENT } from "@/utils/config";
 import { PlusCircle, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import useGetBerkas from "@/features/berkas/useGetDataBerkas";
+import useGetBerkas from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
 import useGetSK from "@/features/SK/useGetSK";
-import { DocumentKP } from "@/services/Berkas/berkasAPI";
+import { DocumentKP } from "@/services/Berkas/CPNS/BERKAS_CPNS_API";
 import BerkasSkeleton from "@/components/BerkasSkeleton";
 import { useDataContext } from "@/context/useDataContext";
 
@@ -20,13 +20,13 @@ function Berkala() {
   const hasFilled = SK?.data?.length;
   const hasUpload = berkas?.data?.find(
     (item) =>
-      new Date(item.created_at).getFullYear() === new Date().getFullYear()
+      new Date(item.created_at).getFullYear() === new Date().getFullYear(),
   );
 
   const isLoading = isLoadingBerkas || isLoadingSK;
   const getNewsBerkas = berkas?.data?.filter(
     (item) =>
-      new Date(item.created_at).getFullYear() === new Date().getFullYear()
+      new Date(item.created_at).getFullYear() === new Date().getFullYear(),
   );
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function Berkala() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+      {/* <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <button
           onClick={() => window.history.back()}
           className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors text-sm sm:text-base"
@@ -76,17 +76,17 @@ function Berkala() {
             </Button>
           </NavLink>
         )}
-      </div>
+      </div> */}
 
       {/* Title */}
-      <div className="mb-4 sm:mb-6">
+      {/* <div className="mb-4 sm:mb-6">
         <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 capitalize">
           Data Berkala
         </h1>
-      </div>
+      </div> */}
 
       {/* Desktop Table View - Hidden on mobile */}
-      <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
+      {/* <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
         <table className="w-full text-sm text-gray-700">
           <thead className="bg-blue-50 text-gray-700 text-xs uppercase tracking-wider">
             <tr>
@@ -163,10 +163,10 @@ function Berkala() {
             ))}
           </tbody>
         </table>
-      </div>
+      </div> */}
 
       {/* Mobile Card View - Visible only on mobile */}
-      <div className="md:hidden space-y-4">
+      {/* <div className="md:hidden space-y-4">
         {getNewsBerkas?.map((item: DocumentKP) => (
           <div
             key={item.id}
@@ -245,15 +245,15 @@ function Berkala() {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* No Data Message */}
-      {getNewsBerkas?.length === 0 && (
-        <div className="text-center mt-10 py-8 text-gray-500 text-sm sm:text-base">
-          <FileText className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-          <p>Belum ada data kenaikan pangkat dokumen kepegawaian.</p>
-        </div>
-      )}
+      <div className="text-center mt-10 py-8 text-gray-500 text-sm sm:text-base">
+        <FileText className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+        <p className="capitalize">Belum ada dokumen berkala kepegawaian.</p>
+      </div>
+      {/* {getNewsBerkas?.length === 0 && (
+      )} */}
     </div>
   );
 }

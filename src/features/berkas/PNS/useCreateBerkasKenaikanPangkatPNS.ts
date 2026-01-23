@@ -1,13 +1,16 @@
-import { createBerkas_API } from "@/services/Berkas/berkasAPI";
+import { CREATE_BERKAS_KENAIKAN_PANGKAT_PNS_API } from "@/services/Berkas/PNS/BERKAS_PNS_API";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-function useCreateBerkas() {
+function useCreateBerkasKenaikanPangkatPNS() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate: onCreateBerkas, isPending: isCreatingBerkas } = useMutation({
-    mutationFn: createBerkas_API,
+  const {
+    mutate: onCreateBerkasKenaikanPangkatPNS,
+    isPending: isCreatingBerkasKenaikanPangkatPNS,
+  } = useMutation({
+    mutationFn: CREATE_BERKAS_KENAIKAN_PANGKAT_PNS_API,
     onSuccess: () => {
       toast.success("Berhasil menambahkan");
       navigate("/berkas");
@@ -19,6 +22,9 @@ function useCreateBerkas() {
     },
   });
 
-  return { onCreateBerkas, isCreatingBerkas };
+  return {
+    onCreateBerkasKenaikanPangkatPNS,
+    isCreatingBerkasKenaikanPangkatPNS,
+  };
 }
-export default useCreateBerkas;
+export default useCreateBerkasKenaikanPangkatPNS;

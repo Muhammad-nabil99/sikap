@@ -1,207 +1,213 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import {  PlusCircle, XCircle } from "lucide-react";
+import {
+  PlusCircle,
+  FileText,
+  Calendar,
+  ShieldCheck,
+  Banknote,
+  ExternalLink,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { cn } from "@/lib/utils";
 import useGetSK from "@/features/SK/useGetSK";
 import SKSkeleton from "@/components/SKSkeleton";
-import {
-  golonganRuang,
-} from "@/utils/helper";
-
-export interface SKData {
-  id: number;
-  tmt_golongan: string;
-  masa_gk_bulanan: string;
-  golongan_ruang: string;
-  masa_gk_tahunan: number;
-  nomor_sk: string;
-  tanggal_sk: string;
-  nomor_pertek_bkn: string;
-  tanggal_pertek_bkn: string;
-  jenis_kp: string;
-  pangkat: string;
-  gaji_pokok: number;
-  pegawai: {
-    id: number;
-    nama: string;
-    email: string;
-    nip: string;
-    agama: string;
-    jabatan: string;
-  };
-}
+import { golonganRuang } from "@/utils/helper";
 
 const SK = () => {
   const { SK, isLoadingSK } = useGetSK();
-
   if (isLoadingSK) return <SKSkeleton />;
 
-  const detailData: SKData | undefined = SK?.data?.[0];
+  const detailData = SK?.data?.[0];
+  const hasData = !!detailData;
   const { pangkat: namaPangkat } = golonganRuang(detailData?.golongan_ruang);
 
-
-  if (!detailData) {
+  if (!hasData) {
     return (
-      <>
-        <div className="w-full flex justify-end">
-          <NavLink to={"/sk/tambah"}>
-            <Button
-              className={cn(
-                "bg-blue-600 m-auto capitalize w-fit my-2 gap-2 shadow-md hover:shadow-lg transition-all font-semibold"
-              )}
-            >
-              {SK?.data?.length ? "Edit" : "Tambahkan"}
-              <PlusCircle />
-            </Button>
-          </NavLink>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+        <div className="bg-slate-50 p-10 rounded-full border-2 border-dashed border-slate-200">
+          <FileText className="w-16 h-16 text-slate-300" />
         </div>
-
-        <div className="flex items-center justify-center p-6">
-          <Card className="p-8 w-full max-w-xl text-center">
-            <XCircle className="w-10 h-10 text-red-500 mx-auto mb-3" />
-            <h1 className="capitalize text-2xl font-bold text-gray-900 mb-2">
-              Data Belum Diisi
-            </h1>
-            <p className="text-gray-600">
-              Tidak ada data SK Kenaikan Pangkat yang ditemukan.
-            </p>
-          </Card>
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl font-bold text-slate-800">
+            Data SK Belum Tersedia
+          </h2>
+          <p className="text-slate-500 max-w-sm">
+            Silahkan tambahkan informasi Surat Keputusan Kenaikan Pangkat Anda
+            terlebih dahulu.
+          </p>
         </div>
-      </>
+        <NavLink to="/sk/tambah">
+          <Button className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-100 px-8 py-6 rounded-2xl gap-2 font-bold transition-all active:scale-95">
+            <PlusCircle className="w-5 h-5" />
+            Tambahkan Data SK
+          </Button>
+        </NavLink>
+      </div>
     );
   }
-  const displayFields1 = [
-    {
-      label: "Pangkat",
-      value: namaPangkat || detailData.pangkat || "-",
-    },
-    {
-      label: "Golongan Ruang",
-      value: `${detailData.golongan_ruang}`
-        .split("/")
-        .map((item, index) =>
-          index == item?.length - 1 ? item : `${item}`.toLowerCase()
-        )
-        .join("/"),
-    },
-    { label: "TMT", value: detailData.tmt_golongan },
-  ];
-  const displayFields = [
-    { label: "Jenis KP", value: detailData.jenis_kp },
-    {
-      label: "Masa Kerja Golongan",
-      value: `${detailData.masa_gk_tahunan} tahun ${
-        new Date(detailData.masa_gk_bulanan).getMonth() + 1
-      } bulan`,
-    },
-
-    { label: "Nomor SK", value: detailData.nomor_sk },
-    { label: "Tanggal SK", value: detailData.tanggal_sk },
-    { label: "Nomor Pertek BKN", value: detailData.nomor_pertek_bkn },
-    { label: "Tanggal Pertek BKN", value: detailData.tanggal_pertek_bkn },
-  ];
-
-  
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-  
-  <div className="bg-gradient-to-br from-white to-gray-50 shadow-lg border border-gray-200 rounded-2xl p-8 md:p-10">
-    
-    {/* Header Section */}
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b-2 border-gray-200 mb-6">
-      <div>
-        <h1 className="font-bold text-3xl text-gray-800 mb-1 capitalize">
-          Data SK
-        </h1>
-        <p className="text-gray-500 text-sm">
-          Informasi Surat Keputusan Pegawai
-        </p>
+    <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {/* HEADER SECTION */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black text-slate-800 tracking-tight">
+            Data SK Pegawai
+          </h1>
+          <p className="text-slate-500 text-sm font-medium">
+            Manajemen Surat Keputusan & Kenaikan Pangkat
+          </p>
+        </div>
+        <NavLink to="/sk/tambah">
+          <Button className="bg-white hover:bg-slate-50 text-blue-600 border border-slate-200 shadow-sm px-6 rounded-xl font-bold flex items-center gap-2 transition-all">
+            <ExternalLink className="w-4 h-4" />
+            Perbarui Data SK
+          </Button>
+        </NavLink>
       </div>
 
-      <NavLink to={"/sk/tambah"}>
-        <Button
-          className={cn(
-            "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800",
-            "text-white px-6 py-2.5 rounded-lg",
-            "shadow-md hover:shadow-xl transition-all duration-300",
-            "font-semibold flex items-center gap-2",
-            "transform hover:-translate-y-0.5 active:translate-y-0 capitalize"
-          )}
-        >
-          <PlusCircle className="w-5 h-5" />
-          <span>{SK?.data?.length ? "Edit" : "Tambahkan"}</span>
-        </Button>
-      </NavLink>
-    </div>
-
-    {/* Pangkat/Golongan/TMT Section */}
-    <section className="space-y-4 mb-8">
-      <p className="text-sm uppercase tracking-wide text-gray-500 font-medium">
-        Pangkat / Golongan Ruang / TMT
-      </p>
-      <div className="flex flex-wrap gap-x-2 gap-y-1 bg-white rounded-xl p-4 border border-gray-200">
-        {displayFields1.map((item, i) => (
-          <div key={i}>
-            <p className="text-gray-900 font-semibold text-base sm:text-lg">
-              {item.value || "-"}{" "}
-              {item.label.toLowerCase() === "tmt" ? "" : "/"}
+      {/* HIGHLIGHT CARDS (Pangkat & Golongan) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-blue-600 rounded-3xl p-6 text-white shadow-xl shadow-blue-100 flex items-center gap-5">
+          <div className="bg-white/20 p-4 rounded-2xl backdrop-blur-sm">
+            <ShieldCheck className="w-8 h-8 text-white" />
+          </div>
+          <div>
+            <p className="text-blue-100 text-xs font-bold uppercase tracking-wider">
+              Pangkat / Golongan
+            </p>
+            <h3 className="text-xl font-black capitalize">
+              {namaPangkat || detailData.pangkat || "-"}
+            </h3>
+            <p className="text-sm font-medium opacity-90">
+              {detailData.golongan_ruang}
             </p>
           </div>
-        ))}
-      </div>
-    </section>
+        </div>
 
-    {/* Detail SK Grid */}
-    <section className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-2">
-        {displayFields.map((item, i) => (
-          <div 
-            key={i}
-            className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
-          >
-            <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2 ">
-              {item.label}
-            </p>
-            <p className="text-gray-900 font-semibold text-base break-words">
-              {item.value || (
-                <span className="text-gray-400 italic">Tidak ada data</span>
-              )}
-            </p>
+        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center gap-5">
+          <div className="bg-emerald-50 p-4 rounded-2xl text-emerald-600">
+            <Calendar className="w-8 h-8" />
           </div>
-        ))}
+          <div>
+            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">
+              TMT Golongan
+            </p>
+            <h3 className="text-xl font-black text-slate-800">
+              {detailData.tmt_golongan || "-"}
+            </h3>
+          </div>
+        </div>
 
-        {/* Pangkat */}
-        {/* <div className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
-          <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2">
-            Pangkat
-          </p>
-          <p className="text-gray-900 font-semibold text-base capitalize break-words">
-            {namaPangkat || detailData.pangkat || (
-              <span className="text-gray-400 italic">Tidak ada data</span>
-            )}
-          </p>
-        </div> */}
-
-        {/* Gaji Pokok */}
-        {detailData.gaji_pokok > 0 && (
-          <div className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
-            <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2">
+        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center gap-5">
+          <div className="bg-amber-50 p-4 rounded-2xl text-amber-600">
+            <Banknote className="w-8 h-8" />
+          </div>
+          <div>
+            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">
               Gaji Pokok
             </p>
-            <p className="text-gray-900 font-semibold text-base break-words">
-              Rp. {detailData.gaji_pokok.toLocaleString("id-ID")}
-            </p>
+            <h3 className="text-xl font-black text-slate-800">
+              Rp {detailData.gaji_pokok?.toLocaleString("id-ID") || "0"}
+            </h3>
           </div>
-        )}
+        </div>
       </div>
-    </section>
 
-  </div>
-</div>
+      {/* DETAIL GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Administrasi SK */}
+        <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm space-y-6">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+            <h4 className="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">
+              Administrasi SK
+            </h4>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            <DetailItem label="Nomor SK" value={detailData.nomor_sk} />
+            <DetailItem label="Tanggal SK" value={detailData.tanggal_sk} />
+            <DetailItem
+              label="Nomor Pertek BKN"
+              value={detailData.nomor_pertek_bkn}
+            />
+            <DetailItem
+              label="Tanggal Pertek BKN"
+              value={detailData.tanggal_pertek_bkn}
+            />
+          </div>
+        </div>
+
+        {/* Info Tambahan */}
+        <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm space-y-6">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+            <h4 className="font-black text-slate-800 uppercase text-xs tracking-[0.2em]">
+              Keterangan Kenaikan Pangkat
+            </h4>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            <DetailItem
+              label="Jenis Kenaikan pangkat"
+              value={detailData.jenis_kp}
+            />
+            <DetailItem
+              label="KGB terakhir"
+              value={`${detailData.kgb_terakhir}`}
+            />
+            <DetailItem
+              label="Masa Kerja Golongan"
+              value={`${detailData.masa_gk_tahunan} Tahun ${new Date(detailData.masa_gk_bulanan).getMonth() + 1} Bulan`}
+            />
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <p className="text-[10px] font-black text-slate-400 uppercase mb-1">
+                Status Verifikasi
+              </p>
+              <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm">
+                <CheckCircle className="w-4 h-4" /> Data SK Terverifikasi Sistem
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
+
+// Reusable Sub-Component for cleaner look
+const DetailItem = ({ label, value }) => (
+  <div className="group">
+    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-500 transition-colors">
+      {label}
+    </p>
+    <p className="text-sm font-bold text-slate-700 break-words">
+      {value || (
+        <span className="text-slate-300 italic font-normal">
+          Data tidak tersedia
+        </span>
+      )}
+    </p>
+  </div>
+);
+
+// Helper icons that were missing
+const CheckCircle = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+  </svg>
+);
 
 export default SK;

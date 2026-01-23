@@ -1,6 +1,6 @@
-import useCreateBerkas from "@/features/berkas/useCreateBerkas";
-import useGetBerkas from "@/features/berkas/useGetDataBerkas";
-import useUpdateBerkas from "@/features/berkas/useUpdateBerkas";
+import useCreateBerkas from "@/features/berkas/CPNS/useCreateBerkasKenaikanPangkatCPNS";
+import useGetBerkas from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
+import useUpdateBerkas from "@/features/berkas/CPNS/useUpdateBerkasKenaikanPangkatCPNS";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";

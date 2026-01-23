@@ -2,226 +2,136 @@ import SKSkeleton from "@/components/SKSkeleton";
 import { Button } from "@/components/ui/button";
 import useGetUser from "@/features/user/useGetUser";
 import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { PlusCircle } from "lucide-react";
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import {
+  Edit3,
+  Mail,
+  MapPin,
+  Phone,
+  User as UserIcon,
+  Calendar,
+  Briefcase,
+  Info,
+} from "lucide-react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-
-interface ProfileFormData {
-  name: string;
-  email: string;
-  password: string;
-  avatar: string | null;
-}
 
 const DataPegawai: React.FC = () => {
   const { user, isLoadingUser } = useGetUser();
   const userData = user?.data;
-  const [formData, setFormData] = useState<ProfileFormData>({
-    name: "",
-    email: "",
-    password: "",
-    avatar: null,
-  });
 
-  const [preview, setPreview] = useState<string | null>(null);
+  // Membagi field menjadi kategori agar lebih terstruktur
+  const mainInfo = [
+    { label: "NIP", value: userData?.nip, icon: Info },
+    { label: "Email", value: userData?.email, icon: Mail },
+    { label: "Nomor Telepon", value: userData?.nomor, icon: Phone },
+    {
+      label: "Unit Kerja",
+      value: `${userData?.unit_kerja}`?.split("_").join(" "),
+      icon: Briefcase,
+    },
+  ];
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const personalInfo = [
+    { label: "Agama", value: userData?.agama },
+    { label: "Jenis Kelamin", value: userData?.jenis_kelamin },
+    { label: "Tempat Lahir", value: userData?.tempat_lahir },
+    { label: "Tanggal Lahir", value: userData?.tanggal_lahir },
+    { label: "Alamat", value: userData?.alamat, fullWidth: true },
+  ];
 
-  const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData((prev) => ({ ...prev, avatar: URL.createObjectURL(file) }));
-      setPreview(URL.createObjectURL(file));
-    }
-  };
+  if (isLoadingUser) return <SKSkeleton />;
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    console.log("Profile Updated:", formData);
-  };
-
-
-  const userFields = [
-      { label: "Nama", value: userData?.nama },
-      { label: "NIP", value: userData?.nip },
-      { label: "Email", value: userData?.email },
-      { label: "Nomor Telepon", value: userData?.nomor },
-      { label: "Agama", value: userData?.agama },
-      { label: "Jenis Kelamin", value: userData?.jenis_kelamin },
-      {
-        label: "Tempat, Tanggal Lahir",
-        value: `${userData?.tempat_lahir}, ${userData?.tanggal_lahir}`,
-      },
-      { label: "Alamat", value: userData?.alamat },
-      { label: "unit kerja", value: 'kebudayaan' },
-    ];
-
-
-
-    if (isLoadingUser) return <SKSkeleton />;
   return (
-   <> 
-    {/* <div className="max-w-2xl mx-auto p-8 bg-white rounded-2xl border border-gray-100">
-       <div className="mb-8 border-b pb-4">
-         <h1 className="text-2xl font-semibold text-gray-800">Ubah Profil</h1>
-         <p className="capitalize text-gray-500 text-sm mt-1">
-           Perbaruhi data diri data pengaturan akun.
-         </p>
-       </div>
+    <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <div className="relative bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
 
-       <form onSubmit={handleSubmit} className="space-y-6">
-         <div className="flex items-center gap-4">
-           <div className="relative w-20 h-20">
-             <img
-              src={preview || "https://via.placeholder.com/150"}
-              alt="Avatar"
-              className="w-20 h-20 object-cover rounded-full border border-gray-200 shadow-sm"
-            />
-            <label
-              htmlFor="avatar"
-              className="absolute bottom-0 right-0 bg-blue-600 text-white p-1 rounded-full cursor-pointer hover:bg-blue-700 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-.828.514l-4 1a1 1 0 01-1.265-1.265l1-4a2 2 0 01.514-.828z"
-                />
-              </svg>
-            </label>
-            <input
-              type="file"
-              id="avatar"
-              name="avatar"
-              accept="image/*"
-              className="hidden"
-              onChange={handleAvatarChange}
-            />
+        <div className="relative px-8 pb-8 pt-16 flex flex-col md:flex-row items-end gap-6">
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-2xl bg-white p-1 shadow-xl border border-slate-100 transform transition-transform hover:scale-105">
+              <div className="w-full h-full rounded-xl bg-slate-50 flex items-center justify-center overflow-hidden">
+                <UserIcon className="w-16 h-16 text-slate-300" />
+              </div>
+            </div>
           </div>
-          <div>
-            <p className="font-medium text-gray-700">Profile Picture</p>
-            <p className="text-gray-500 text-sm">
-              PNG, JPG maks. 2MB — Tekan ikon untuk mengubah.
+
+          {/* Name & Title */}
+          <div className="flex-1 mb-2 text-center md:text-left">
+            <h1 className="text-3xl font-black text-slate-800 tracking-tight capitalize">
+              {userData?.nama || "Nama Pegawai"}
+            </h1>
+            <p className="text-slate-500 font-medium flex items-center justify-center md:justify-start gap-2">
+              <span className="bg-blue-50 text-blue-600 px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border border-blue-100">
+                Pegawai Aktif
+              </span>
             </p>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">Nama</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="Masukkan nama anda"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-          />
+          <NavLink to="/data-pegawai/tambah" className="mb-2">
+            <Button className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm px-6 gap-2 rounded-xl transition-all active:scale-95">
+              <Edit3 className="w-4 h-4 text-blue-600" />
+              <span className="font-bold">Ubah Profil</span>
+            </Button>
+          </NavLink>
         </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="contoh@email.com"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            placeholder="masukkan password baru"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-          />
-        </div>
-
-        <div className="pt-2">
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-all shadow-sm"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div> */}
-    <div className="bg-gradient-to-br from-white to-gray-50 shadow-sm border border-gray-200 rounded-2xl p-8 md:p-10">
-  
-  <section className="space-y-6 capitalize">
-    {/* Header Section */}
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b-2 border-gray-200">
-      <div>
-        <h2 className="font-bold text-3xl text-gray-800 mb-1">
-          Data Pegawai
-        </h2>
-        <p className="text-gray-500 text-sm">
-          Informasi lengkap pegawai
-        </p>
       </div>
-      
-      <NavLink to={"/data-pegawai/tambah"}>
-        <Button
-          className={cn(
-            "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800",
-            "text-white px-6 py-2.5 rounded-lg",
-            "shadow-md hover:shadow-xl transition-all duration-300",
-            "font-semibold flex items-center gap-2",
-            "transform hover:-translate-y-0.5 active:translate-y-0"
-          )}
-        >
-          <PlusCircle className="w-5 h-5" />
-          <span>Edit</span>
-        </Button>
-      </NavLink>
-    </div>
 
-    {/* Data Grid Section */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-2">
-      {userFields.map((item, i) => (
-        <div 
-          key={i} 
-          className="group bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200"
-        >
-          <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2 flex items-center gap-2">
-            {item.label}
-          </p>
-          <p className="text-gray-900 font-semibold text-base break-words">
-            {item.value || (
-              <span className="text-gray-400 italic">Tidak ada data</span>
-            )}
-          </p>
+      {/* SECTION 2: INFORMATION GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column: Quick Contacts */}
+        <div className="space-y-6">
+          <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] px-2">
+            Konektivitas
+          </h3>
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4 shadow-sm">
+            {mainInfo.map((item, idx) => (
+              <div key={idx} className="flex items-center gap-4 group">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                  <item.icon className="w-5 h-5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">
+                    {item.label}
+                  </p>
+                  <p className="text-sm font-bold text-slate-700 truncate">
+                    {item.value || "-"}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
 
-  </section>
-  
-</div>
-   </>
-       
-    
+        {/* Right Column: Personal Details */}
+        <div className="lg:col-span-2 space-y-6">
+          <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] px-2">
+            Detail Personal
+          </h3>
+          <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+              {personalInfo.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={cn("group", item.fullWidth && "md:col-span-2")}
+                >
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+                    <span className="w-1 h-1 bg-blue-500 rounded-full"></span>
+                    {item.label}
+                  </p>
+                  <p className="text-base font-semibold text-slate-700 border-b border-transparent group-hover:border-blue-100 pb-1 transition-all capitalize">
+                    {item.value || (
+                      <span className="text-slate-300 italic font-normal">
+                        Belum dilengkapi
+                      </span>
+                    )}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

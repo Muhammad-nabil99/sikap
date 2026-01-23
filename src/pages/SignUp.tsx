@@ -24,19 +24,13 @@ import {
 import { Link } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import useSignUpUser from "@/features/user/useSignUpUser";
+import favicon from "@/assets/favicon.ico";
 
 interface Inputs {
+  nip: number;
   nama: string;
-  email: string;
   password: string;
   password_confirmation: string;
-  nip: number;
-  nomor: number;
-  jenis_kelamin: string;
-  agama: string;
-  alamat: string;
-  tempat_lahir: string;
-  tanggal_lahir: string;
 }
 
 const SignUp = () => {
@@ -44,9 +38,7 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
     getValues,
-    control,
   } = useForm<Inputs>();
 
   const { signUp, isPending } = useSignUpUser();
@@ -55,15 +47,14 @@ const SignUp = () => {
     useState(false);
 
   const onSubmit = (data: Inputs) => {
-    console.log("data sign up", data);
 
+    
     const newUser = {
-      nomor: Number(data.nomor),
-      nip: Number(data.nip),
       ...data,
+      nip: Number(data.nip),
     };
-    console.log("newUser", newUser);
-
+    console.log(newUser);
+    
     signUp(newUser);
   };
 
@@ -74,23 +65,19 @@ const SignUp = () => {
           {/* Logo & Title */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 shadow-lg">
-              <img
-                className="w-8 h-8"
-                src="../../public/favicon.ico"
-                alt="logo"
-              />
+              <img className="w-8 h-8" src={favicon} alt="logo" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Daftar Akun Baru
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 capitalize">
               Silakan lengkapi data diri Anda untuk mendaftar
             </p>
           </div>
 
           {/* Sign Up Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Row 1: Nama, Email */}
+            {/* Row 1: Nama */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="nama" className="text-gray-700 font-medium">
@@ -107,17 +94,17 @@ const SignUp = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-700 font-medium">
-                  Email
+                <Label htmlFor="nip" className="text-gray-700 font-medium">
+                  NIP
                 </Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="nama@email.com"
-                  {...register("email", { required: "Email wajib diisi" })}
+                  id="nip"
+                  type="number"
+                  placeholder="Contoh: 1989..."
+                  {...register("nip", { required: "NIP wajib diisi" })}
                 />
-                {errors.email && (
-                  <p className="text-xs text-red-500">{errors.email.message}</p>
+                {errors.nip && (
+                  <p className="text-xs text-red-500">{errors.nip.message}</p>
                 )}
               </div>
             </div>
@@ -201,162 +188,7 @@ const SignUp = () => {
             </div>
 
             {/* Row 3: NIP, Nomor Telepon */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="nip" className="text-gray-700 font-medium">
-                  NIP
-                </Label>
-                <Input
-                  id="nip"
-                  type="number"
-                  placeholder="Contoh: 1989..."
-                  {...register("nip", { required: "NIP wajib diisi" })}
-                />
-                {errors.nip && (
-                  <p className="text-xs text-red-500">{errors.nip.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="nomor" className="text-gray-700 font-medium">
-                  Nomor Telepon (WA)
-                </Label>
-                <Input
-                  id="nomor"
-                  type="number"
-                  placeholder="Contoh: 62812..."
-                  {...register("nomor", { required: "Nomor wajib diisi" })}
-                />
-                {errors.nomor && (
-                  <p className="text-xs text-red-500">{errors.nomor.message}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Row 4: Jenis Kelamin, Agama */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="jenis_kelamin"
-                  className="text-gray-700 font-medium"
-                >
-                  Jenis Kelamin
-                </Label>
-
-                <Controller
-                  name="jenis_kelamin"
-                  control={control}
-                  rules={{ required: "Jenis kelamin wajib dipilih" }}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger id="jenis_kelamin">
-                        <SelectValue placeholder="Pilih jenis kelamin" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="laki-laki">Laki-laki</SelectItem>
-                        <SelectItem value="perempuan">Perempuan</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.jenis_kelamin && (
-                  <p className="text-xs text-red-500">
-                    {errors.jenis_kelamin.message as string}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Controller
-                  name="agama"
-                  control={control}
-                  rules={{ required: "Agama wajib dipilih" }}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger id="agama">
-                        <SelectValue placeholder="Pilih agama" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="islam">Islam</SelectItem>
-                        <SelectItem value="kristen">Kristen</SelectItem>
-                        <SelectItem value="katolik">Katolik</SelectItem>
-                        <SelectItem value="hindu">Hindu</SelectItem>
-                        <SelectItem value="buddha">Buddha</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.agama && (
-                  <p className="text-xs text-red-500">
-                    {errors.agama.message as string}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Row 5: Tempat Lahir, Tanggal Lahir */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="tempat_lahir"
-                  className="text-gray-700 font-medium"
-                >
-                  Tempat Lahir
-                </Label>
-                <Input
-                  id="tempat_lahir"
-                  placeholder="Contoh: Kendari"
-                  {...register("tempat_lahir", {
-                    required: "tempat lahir wajib diisi",
-                  })}
-                />
-                {errors.tempat_lahir && (
-                  <p className="text-xs text-red-500">
-                    {errors.tempat_lahir.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="tanggal_lahir"
-                  className="text-gray-700 font-medium"
-                >
-                  Tanggal Lahir
-                </Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="tanggal_lahir"
-                    type="date"
-                    className="pl-10"
-                    {...register("tanggal_lahir", {
-                      required: "tanggal lahir wajib diisi",
-                    })}
-                  />
-                  {errors.tanggal_lahir && (
-                    <p className="text-xs text-red-500">
-                      {errors.tanggal_lahir.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Row 6: Alamat */}
-            <div className="space-y-2">
-              <Label htmlFor="alamat" className="text-gray-700 font-medium">
-                Alamat Lengkap
-              </Label>
-              <Input
-                id="alamat"
-                placeholder="Masukkan alamat lengkap Anda"
-                {...register("alamat", { required: "alamat wajib diisi" })}
-              />
-              {errors.alamat && (
-                <p className="text-xs text-red-500">{errors.alamat.message}</p>
-              )}
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
             {/* Submit Button */}
             <Button

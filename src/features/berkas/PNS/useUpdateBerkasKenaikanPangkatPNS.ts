@@ -1,13 +1,13 @@
-import { updateBerkas_API } from "@/services/Berkas/berkasAPI";
+import { UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API } from "@/services/Berkas/PNS/BERKAS_PNS_API";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-function useUpdateBerkas() {
+function useUpdateBerkasKenaikanPangkatPNS() {
   //    const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate: onUpdateBerkas, isPending: isUpdatingBerkas } = useMutation({
+  const { mutate: onUpdateBerkasKenaikanPangkatPNS, isPending: isUpdatingBerkasKenaikanPangkatPNS } = useMutation({
     mutationFn: ({ id, formData }: { id: number; formData: FormData }) =>
-      updateBerkas_API(id, formData),
+      UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(id, formData),
     onSuccess: () => {
       toast.success("Berhasil Edit");
       //  navigate('/berkas')
@@ -19,6 +19,6 @@ function useUpdateBerkas() {
     },
   });
 
-  return { onUpdateBerkas, isUpdatingBerkas };
+  return { onUpdateBerkasKenaikanPangkatPNS, isUpdatingBerkasKenaikanPangkatPNS };
 }
-export default useUpdateBerkas;
+export default useUpdateBerkasKenaikanPangkatPNS;

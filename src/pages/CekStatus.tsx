@@ -1,6 +1,6 @@
 import CekStatusSkeleton from "@/components/CekStatusSkeleton";
-import useGetBerkas from "@/features/berkas/useGetDataBerkas";
-import useGetDataKP from "@/features/berkas/useGetDataBerkas";
+import useGetBerkas from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
+import useGetDataKP from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
 import { BASE_DOCUMENT } from "@/utils/config";
 import { colorindicatorStatus } from "@/utils/helper";
 import React from "react";
@@ -105,13 +105,12 @@ const CekStatus: React.FC = () => {
   const currentStatus = incidentData.find(
     (item) =>
       `${item.title}`?.toLowerCase() ==
-      `${berkas?.data[0]?.status}`?.toLowerCase()
+      `${berkas?.data[0]?.status}`?.toLowerCase(),
   );
 
   const findStatus = incidentData?.slice(0, currentStatus?.id + 1);
 
   if (isLoadingBerkas) return <CekStatusSkeleton />;
-
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
@@ -165,7 +164,7 @@ const CekStatus: React.FC = () => {
                   </h3>
                   <span
                     className={`capitalize px-2 py-1 text-xs rounded-full ${colorindicatorStatus(
-                      incident.status
+                      incident.status,
                     )}`}
                   >
                     {incident.status}

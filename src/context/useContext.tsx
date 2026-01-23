@@ -1,4 +1,4 @@
-import useGetBerkas from "@/features/berkas/useGetDataBerkas";
+import useGetBerkas from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
 import useGetSK from "@/features/SK/useGetSK";
 
 import { createContext } from "react";
@@ -24,7 +24,7 @@ export const DataProvider = ({ children }) => {
     isLoadingBerkas ||
     berkas?.data?.filter(
       (item) =>
-        new Date(item.created_at).getFullYear() == new Date().getFullYear()
+        new Date(item.created_at).getFullYear() == new Date().getFullYear(),
     );
 
   return (

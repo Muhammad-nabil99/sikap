@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   Home,
   FileText,
@@ -8,18 +10,14 @@ import {
   ChevronDown,
   HandCoins,
   TrendingUp,
-  ArrowUpRight
+  ArrowUpRight,
+  ShieldCheck,
 } from "lucide-react";
-
-import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar as SidebarUI,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
@@ -27,207 +25,252 @@ import {
 } from "@/components/ui/sidebar";
 import favicon from "@/assets/favicon.ico";
 import useGetUser from "@/features/user/useGetUser";
-
-
+import { shortenName } from "@/utils/helper";
+import useGetSK from "@/features/SK/useGetSK";
 
 export const Sidebar = () => {
-  const {user,isLoadingUser} =   useGetUser();
-  
-  
-const data = {
-  agama: "islam",
-  alamat: "wolasi",
-  created_at: "2025-11-07T13:18:47.000000Z",
-  email: "Masri@gmail.com",
-  id: 0,
-  jenis_kelamin: "perempuan",
-  nama: "Masri Wati, SE. M.Si",
-  nip: "198912312021111",
-  nomor: "6285280832326",
-  tanggal_lahir: "2005-01-01",
-  tempat_lahir: "",
-  updated_at: "2025-11-07T13:18:47.000000Z",
-};
+  const { user } = useGetUser();
+  const { SK, isLoadingSK } = useGetSK();
 
-const REQUIRED_FIELDS = [
-  "nama",
-  "nip",
-  "email",
-  "agama",
-  "jenis_kelamin",
-  "alamat",
-  "tempat_lahir",
-  "tanggal_lahir",
-  "nomor",
-];
-const hasEmptyUserData = REQUIRED_FIELDS.some((key) => {
-  const value = user?.data[key];
-  return (
-    value === null ||
-    value === undefined ||
-    value === "" ||
-    (typeof value === "string" && value.trim() === "")
+  const location = useLocation();
+  const { setOpenMobile, isMobile, open } = useSidebar();
+
+  // Logical state for dropdowns
+  const [openBerkas, setOpenBerkas] = useState(
+    location.pathname.startsWith("/berkas"),
   );
-});
 
+  // Validation Logic data pegawai
+  const REQUIRED_FIELDS_DATA_PEGAWAI = [
+    "nama",
+    "nip",
+    "email",
+    "agama",
+    "jenis_kelamin",
+    "alamat",
+    "tempat_lahir",
+    "tanggal_lahir",
+    "nomor",
+  ];
+  const hasEmptyUserData = REQUIRED_FIELDS_DATA_PEGAWAI.some(
+    (key) => !user?.data?.[key]?.toString().trim(),
+  );
+  // Validation Logic sk
+  const REQUIRED_FIELDS_SK = [
+    "tanggal_sk",
+    "nomor_sk",
+    "tmt_golongan",
+    "nomor_pertek_bkn",
+    "tanggal_pertek_bkn",
+    "masa_gk_bulanan",
+    "masa_gk_tahunan",
+    "golongan_ruang",
+    "jenis_kp",
+    "pangkat",
+    "gaji_pokok",
+    "kgb_terakhir",
+  ];
+  const hasEmptySK =
+    !SK ||
+    REQUIRED_FIELDS_SK?.some((key) => !SK?.data?.[0]?.[key]?.toString().trim());
 
   const menuItems = [
-  { id: 1, link: "/dashboard", icon: Home, label: "Dashboard", },
-  { id: 6, link: "/data-pegawai", icon: UserCircle, label: "data pegawai", alert: hasEmptyUserData, },
-  {
-    id: 2,
-    link: "/sk",
-    icon: User,
-    label: "SK",
-  },
-  { id: 3, link: "/berkas", icon: FileText, label: "Berkas", children: [
-      { id: 11, link: "/berkas/pensiun", icon: HandCoins, label: "Pensiun" },
-      { id: 22, link: "/berkas/berkala", icon: TrendingUp, label: "Berkala" },
-      {
-        id: 33,
-        link: "/berkas/kenaikan-pangkat",
-        icon: ArrowUpRight ,
-        label: "Kenaikan Pangkat",
-      
-      },
-    ],},
-  { id: 5, link: "/arsip", icon: History, label: "Arsip" },
-];
-  const { setOpenMobile, isMobile, open } = useSidebar();
-  const location = useLocation();
+    { id: "dash", link: "/dashboard", icon: Home, label: "Dashboard" },
+    {
+      id: "data",
+      link: "/data-pegawai",
+      icon: UserCircle,
+      label: "Data Pegawai",
+      alert: hasEmptyUserData,
+    },
+    {
+      id: "sk",
+      link: "/sk",
+      icon: User,
+      label: "Surat Keputusan (SK)",
+      alert: hasEmptySK,
+    },
+    {
+      id: "berkas",
+      link: "/berkas",
+      icon: FileText,
+      label: "Manajemen Berkas",
+      children: [
+        {
+          id: "pensiun",
+          link: "/berkas/pensiun",
+          icon: HandCoins,
+          label: "Pensiun",
+        },
+        {
+          id: "berkala",
+          link: "/berkas/berkala",
+          icon: TrendingUp,
+          label: "Gaji Berkala",
+        },
+        {
+          id: "pangkat",
+          link: "/berkas/kenaikan-pangkat",
+          icon: ArrowUpRight,
+          label: "Kenaikan Pangkat",
+        },
+      ],
+    },
+    { id: "arsip", link: "/arsip", icon: History, label: "Arsip Digital" },
+  ];
 
-  const handleLinkClick = () => {
-    if (isMobile) {
-      setOpenMobile(false);
-    }
-  };
+  const handleLinkClick = () => isMobile && setOpenMobile(false);
 
-  const [openSK, setOpenSK] = useState(location.pathname.startsWith("/sk"));
+  if (!user?.data || isLoadingSK) return null;
 
   return (
-    <SidebarUI className="border-r border-sidebar-border">
-      <SidebarHeader className="p-4 sm:p-6">
-        <div className="flex items-center justify-between gap-2">
+    <SidebarUI className="border-r border-slate-100 bg-white">
+      {/* 1. Header: Branding */}
+      <SidebarHeader className="p-6">
+        <div className="flex items-center justify-between">
           <Link
             to="/dashboard"
-            className="flex items-center gap-3 mb-6 sm:mb-8 flex-1 min-w-0"
+            className="flex items-center gap-3"
             onClick={handleLinkClick}
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shadow-md relative overflow-hidden flex-shrink-0">
-              <div className="absolute inset-0 bg-white/10"></div>
-              <span className="text-white font-bold text-lg sm:text-xl relative z-10">
-                <img src={favicon} alt="logo" />
-              </span>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200 overflow-hidden shrink-0">
+              <img src={favicon} alt="logo" className="w-6 h-6" />
             </div>
-            <div className="min-w-0 flex-1">
-              <span className="text-sidebar-foreground font-bold text-lg sm:text-xl block truncate">
+            <div
+              className={cn(
+                "transition-opacity duration-300",
+                !open && "opacity-0 invisible",
+              )}
+            >
+              <h1 className="text-xl font-black text-slate-800 tracking-tighter leading-none">
                 SIKAP
-              </span>
-              <span className="capitalize text-xs text-muted-foreground block truncate">
-                selamat datang
+              </h1>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                pegawai Portal
               </span>
             </div>
           </Link>
-
-          {isMobile && open && (
-            <button
-              onClick={() => setOpenMobile(false)}
-              className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors flex-shrink-0 mb-6 sm:mb-8"
-              aria-label="Close sidebar"
-            >
-              <X className="w-5 h-5 text-sidebar-foreground" />
+          {isMobile && (
+            <button onClick={() => setOpenMobile(false)}>
+              <X className="w-5 h-5 text-slate-400" />
             </button>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => {
-                const isActive = location.pathname === item.link;
-                const hasChildren = item.children?.length > 0;
+      {/* 2. Content: Navigation */}
+      <SidebarContent className="px-4">
+        <SidebarMenu className="space-y-1.5">
+          {menuItems.map((item) => {
+            const isActive =
+              location.pathname === item.link ||
+              (item.children && location.pathname.startsWith(item.link));
+            const hasChildren = item.children?.length > 0;
 
-                return (
-                  <SidebarMenuItem key={item.id}>
-                    {/* Parent Item - NavLink for navigation, button for dropdown toggle */}
-                    {hasChildren ? (
-                      <button
-                        onClick={() => setOpenSK(!openSK)}
+            return (
+              <SidebarMenuItem key={item.id} className="list-none">
+                {hasChildren ? (
+                  <>
+                    <button
+                      onClick={() => setOpenBerkas(!openBerkas)}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                        isActive
+                          ? "bg-blue-50 text-blue-700"
+                          : "text-slate-500 hover:bg-slate-50",
+                      )}
+                    >
+                      <item.icon
                         className={cn(
-                          "w-full flex items-center gap-3 px-4 py-5 rounded-xl transition-all",
-                          "hover:bg-sidebar-accent",
-                          location.pathname.startsWith(item.link) &&
-                            "bg-gradient-to-r from-primary to-blue-600 text-white"
+                          "w-5 h-5",
+                          isActive
+                            ? "text-blue-600"
+                            : "group-hover:text-slate-700",
                         )}
-                      >
-                        <item.icon className="w-5 h-5" />
-                        <span className="flex-1 text-left text-sm font-medium">
-                          {item.label}
-                        </span>
-                        <ChevronDown
-                          className={cn(
-                            "w-4 h-4 transition-transform",
-                            openSK && "rotate-180"
-                          )}
-                        />
-                      </button>
-                    ) : (
-                      <NavLink
-                        to={item.link}
-                        onClick={handleLinkClick}
+                      />
+                      <span className="flex-1 text-left text-sm font-semibold tracking-tight">
+                        {item.label}
+                      </span>
+                      <ChevronDown
                         className={cn(
-                          "w-full flex items-center gap-3 px-4 py-5 rounded-xl transition-all",
-                          "hover:bg-sidebar-accent",
-                          isActive &&
-                            "bg-gradient-to-r from-primary to-blue-600 text-white"
+                          "w-4 h-4 transition-transform",
+                          openBerkas && "rotate-180",
                         )}
-                      >
-                        <item.icon className="w-5 h-5" />
-                        <span className="capitalize flex-1 text-left text-sm font-medium">
-                          {item.label}
-                        </span>
-                        { item.alert && <div className="p-1 rounded-full bg-yellow-100 animate-blink">
-                          <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                        </div>}
-                      </NavLink>
-                    )}
+                      />
+                    </button>
 
-                    {/* Dropdown for children */}
-                    {hasChildren && openSK && (
-                      <div className="ml-8 mt-2 space-y-1">
+                    {/* Collapsible Children */}
+                    <div
+                      className={cn(
+                        "overflow-hidden transition-all duration-300",
+                        openBerkas ? "max-h-40 mt-1" : "max-h-0",
+                      )}
+                    >
+                      <div className="ml-9 space-y-1 border-l-2 border-slate-100 pl-4">
                         {item.children.map((child) => (
                           <NavLink
                             key={child.id}
                             to={child.link}
                             onClick={handleLinkClick}
-                            className={cn(
-                              "flex items-center gap-3 px-3 py-3 rounded-lg text-sm transition-all",
-                              "hover:bg-sidebar-accent",
-                              location.pathname === child.link &&
-                                "bg-primary/10 text-primary"
-                            )}
+                            className={({ isActive }) =>
+                              cn(
+                                "flex items-center gap-3 py-2 text-sm transition-colors",
+                                isActive
+                                  ? "text-blue-600 font-bold"
+                                  : "text-slate-500 hover:text-slate-800",
+                              )
+                            }
                           >
-                            <child.icon className="w-4 h-4" />
                             <span>{child.label}</span>
                           </NavLink>
                         ))}
                       </div>
+                    </div>
+                  </>
+                ) : (
+                  <NavLink
+                    to={item.link}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) =>
+                      cn(
+                        "group flex items-center gap-3 px-4 py-3 rounded-xl transition-all relative overflow-hidden",
+                        isActive
+                          ? "bg-blue-600 text-white shadow-md shadow-blue-100"
+                          : "text-slate-500 hover:bg-blue-50 hover:text-blue-600",
+                      )
+                    }
+                  >
+                    <item.icon className="w-5 h-5 shrink-0" />
+                    <span className="text-sm font-semibold tracking-tight truncate">
+                      {item.label}
+                    </span>
+                    {item.alert && (
+                      <span className="absolute right-3 w-2 h-2 rounded-full bg-amber-400 ring-4 ring-amber-400/20 animate-pulse" />
                     )}
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                  </NavLink>
+                )}
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-sidebar-border">
-        <div className="text-xs text-muted-foreground text-center">
-          © 2025 SIKAP
+      {/* 3. Footer: User Profile Card */}
+      <SidebarFooter className="p-4 bg-slate-50/50 border-t border-slate-100">
+        <div className="flex items-center gap-3 p-2">
+          <div className="uppercase w-9 h-9 rounded-full bg-gradient-to-tr from-slate-200 to-slate-100 border-2 border-white shadow-sm flex items-center justify-center font-bold text-slate-600 text-xs">
+            {shortenName(user.data.nama) || "U"}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="capitalize text-xs font-bold text-slate-800 truncate">
+              {user.data.nama}
+            </p>
+            <p className="text-[10px] text-slate-500 font-medium truncate">
+              NIP. {user.data.nip}
+            </p>
+          </div>
         </div>
       </SidebarFooter>
     </SidebarUI>
   );
-}
+};
