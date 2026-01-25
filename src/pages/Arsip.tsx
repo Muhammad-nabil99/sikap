@@ -278,9 +278,6 @@ const Arsip: React.FC = () => {
                 <h3 className="font-extrabold text-slate-800">
                   Arsip SK Pangkat
                 </h3>
-                <button className="bg-white border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-bold text-amber-700 hover:bg-amber-100 flex items-center gap-1.5 shadow-sm transition-all">
-                  <Plus className="w-3 h-3" /> Tambah Baru
-                </button>
               </div>
 
               <div className="space-y-4">
@@ -315,9 +312,6 @@ const Arsip: React.FC = () => {
                 <h3 className="font-extrabold text-slate-800">
                   Arsip SK Jabatan
                 </h3>
-                <button className="bg-white border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-bold text-amber-700 hover:bg-amber-100 flex items-center gap-1.5 shadow-sm transition-all">
-                  <Plus className="w-3 h-3" /> Tambah Baru
-                </button>
               </div>
 
               <div className="space-y-4">

@@ -93,7 +93,7 @@ const SK = () => {
               TMT Golongan
             </p>
             <h3 className="text-xl font-black text-slate-800">
-              {detailData.tmt_golongan || "-"}
+              {new Date(detailData.tmt_golongan).toLocaleDateString() || "-"}
             </h3>
           </div>
         </div>
@@ -126,14 +126,19 @@ const SK = () => {
 
           <div className="grid grid-cols-1 gap-6">
             <DetailItem label="Nomor SK" value={detailData.nomor_sk} />
-            <DetailItem label="Tanggal SK" value={detailData.tanggal_sk} />
+            <DetailItem
+              label="Tanggal SK"
+              value={new Date(detailData.tanggal_sk).toLocaleDateString()}
+            />
             <DetailItem
               label="Nomor Pertek BKN"
               value={detailData.nomor_pertek_bkn}
             />
             <DetailItem
               label="Tanggal Pertek BKN"
-              value={detailData.tanggal_pertek_bkn}
+              value={new Date(
+                detailData.tanggal_pertek_bkn,
+              ).toLocaleDateString()}
             />
           </div>
         </div>
@@ -154,7 +159,7 @@ const SK = () => {
             />
             <DetailItem
               label="KGB terakhir"
-              value={`${detailData.kgb_terakhir}`}
+              value={`${new Date(detailData.kgb_terakhir).toLocaleDateString()}`}
             />
             <DetailItem
               label="Masa Kerja Golongan"

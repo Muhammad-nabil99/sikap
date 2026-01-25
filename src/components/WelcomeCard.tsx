@@ -8,8 +8,8 @@ import { shortenName } from "@/utils/helper";
 export const WelcomeCard = () => {
   const { user, isLoadingUser } = useGetUser();
 
-  
-  return (  
+
+  return (
     <Card className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-primary shadow-xl border-0 animate-scale-in">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
@@ -51,10 +51,20 @@ export const WelcomeCard = () => {
                   NIP: {user?.data?.nip}
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm font-medium">Kepegawaian</span>
-              </div>
+              {user?.data?.unit_kerja && (
+                <div className="flex items-center gap-2 text-white/90 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
+                  <MapPin className="w-4 h-4" />
+                  <span className="text-sm font-medium capitalize">
+                    {`${user?.data?.unit_kerja}`
+                      ?.split("_")
+                      ?.map((item, index) =>
+                        index == 0
+                          ? `${item} `.toLowerCase() + " "
+                          : `${item}`.toUpperCase(),
+                      )}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ import {
   ChevronDown,
   ChevronUp,
   Calendar,
+  AlertCircle,
 } from "lucide-react";
 import { BASE_DOCUMENT } from "@/utils/config";
 import useCreateBerkasKenaikanPangkatPNS from "@/features/berkas/PNS/useCreateBerkasKenaikanPangkatPNS";
@@ -298,7 +299,10 @@ function KenaikanPangkat() {
               const isActionLoading = config.isCreating || config.isUpdating;
               const isExpanded = expandedArchives[config.key] || false;
 
-              const test = config?.getData?.data?.length;
+              const hasSubmited = config.isSingleFile
+                ? !!config?.getData?.data?.[config?.fieldName]
+                : Array.isArray(config?.getData?.data) &&
+                  (config.getData.data as any[]).length > 0;
 
               return (
                 <div key={config.key} className="flex flex-col group">
@@ -312,16 +316,22 @@ function KenaikanPangkat() {
 
                   <div className="flex items-center justify-between mb-3 px-1">
                     <div className="flex items-center gap-2">
-                      <div className="bg-blue-600 p-1.5 rounded-lg">
+                      <div
+                        className={`${hasSubmited ? "bg-blue-600" : "bg-amber-400"} p-1.5 rounded-lg transition-colors duration-300`}
+                      >
                         <BookText className="w-4 h-4 text-white" />
                       </div>
-                      <h2 className="text-sm font-bold text-slate-700 uppercase">
+                      <h2 className="text-sm font-bold text-slate-700 uppercase tracking-tight">
                         Dokumen {config.label}
                       </h2>
                     </div>
-                    {hasFile && (
-                      <span className="flex items-center gap-1.5 text-[11px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md border border-green-100">
+                    {hasSubmited ? (
+                      <span className="flex items-center gap-1.5 text-[10px] font-black text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
                         <CheckCircle2 className="w-3.5 h-3.5" /> TERISI
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1.5 text-[10px] font-black text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100 animate-pulse">
+                        <AlertCircle className="w-3.5 h-3.5" /> BELUM UNGGAH
                       </span>
                     )}
                   </div>
@@ -329,52 +339,59 @@ function KenaikanPangkat() {
                   <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                     {/* Current Year File */}
                     <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-xl mb-4">
-                      <div className="bg-white p-3 rounded-lg text-blue-600 border border-blue-50">
+                      <div
+                        className={`bg-white p-3 rounded-lg border shadow-sm transition-colors ${hasSubmited ? "text-blue-600 border-blue-100" : "text-amber-500 border-amber-100"}`}
+                      >
                         <FileText className="w-7 h-7" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-slate-800 truncate">
-                          {hasFile
-                            ? `${config.label} ${new Date().getFullYear()}.pdf`
-                            : "Belum ada file"}
+                        <p
+                          className={`text-sm font-bold truncate ${hasSubmited ? "text-blue-900" : "text-amber-900"}`}
+                        >
+                          {hasSubmited
+                            ? `${config.label} ${"currentYear"}.pdf`
+                            : "Berkas Kosong"}
                         </p>
-                        <p className="text-[11px] text-slate-500">
-                          {hasFile
-                            ? "Klik ganti untuk memperbarui"
-                            : "Silahkan unggah dokumen"}
+                        <p
+                          className={`text-[11px] font-medium ${hasSubmited ? "text-blue-600/70" : "text-amber-600/80"}`}
+                        >
+                          {hasSubmited
+                            ? "File tersimpan di sistem"
+                            : "Silahkan unggah berkas Anda"}
                         </p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 mb-3">
-                      <button
-                        onClick={() => window.open(existingFileUrl, "_blank")}
-                        disabled={!hasFile}
-                        className="flex items-center justify-center gap-2 py-2 px-4 bg-white border rounded-lg text-xs font-bold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" /> Lihat
-                      </button>
-                      <button
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={isActionLoading}
-                        className="flex items-center justify-center gap-2 py-2 px-4 bg-white border rounded-lg text-xs font-bold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                      >
-                        <RefreshCcw className="w-3.5 h-3.5" /> Ganti
-                      </button>
-                    </div>
+                    {hasSubmited && (
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <button
+                          onClick={() => window.open(existingFileUrl, "_blank")}
+                          disabled={!hasSubmited}
+                          className="flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" /> Lihat
+                        </button>
+                        <button
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isActionLoading}
+                          className="flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all"
+                        >
+                          <RefreshCcw className="w-3.5 h-3.5" /> Ganti
+                        </button>
+                      </div>
+                    )}
 
-                    {test === 0 && (
+                    {!hasSubmited && (
                       <button
                         disabled={isActionLoading}
                         onClick={() => fileInputRef.current?.click()}
-                        className="w-full capitalize flex items-center justify-center gap-2 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all disabled:bg-blue-400 disabled:cursor-not-allowed"
+                        className="w-full capitalize flex items-center justify-center gap-2 py-3 bg-amber-400 hover:bg-amber-500 disabled:bg-amber-200 text-white rounded-xl text-sm font-bold shadow-md shadow-amber-100 transition-all active:scale-[0.98]"
                       >
                         {isActionLoading ? (
-                          <span className="animate-pulse">Mengunggah...</span>
+                          <span className="animate-pulse">Memproses...</span>
                         ) : (
                           <>
-                            <Upload className="w-4 h-4" />
-                            {hasFile ? "Update Dokumen" : "Unggah Dokumen"}
+                            <Upload className="w-4 h-4" /> Unggah Sekarang
                           </>
                         )}
                       </button>

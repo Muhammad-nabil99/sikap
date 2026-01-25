@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserAPI } from "@/services/user/userAPI";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function useUpdateUser() {
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const { mutate: updateUser, isPending } = useMutation({
     mutationFn: updateUserAPI,
 
@@ -16,6 +17,7 @@ function useUpdateUser() {
 
       // OR refetch user from backend
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      navigate('/data-pegawai')
     },
 
     onError: (error: unknown) => {

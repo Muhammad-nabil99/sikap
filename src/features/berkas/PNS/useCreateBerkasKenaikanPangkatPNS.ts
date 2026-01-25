@@ -13,7 +13,7 @@ function useCreateBerkasKenaikanPangkatPNS() {
     mutationFn: CREATE_BERKAS_KENAIKAN_PANGKAT_PNS_API,
     onSuccess: () => {
       toast.success("Berhasil menambahkan");
-      navigate("/berkas");
+      // navigate("/berkas");
       queryClient.invalidateQueries({ queryKey: ["berkas"] });
     },
     onError: (error) => {

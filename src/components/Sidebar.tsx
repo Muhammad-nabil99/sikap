@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   Home,
@@ -28,10 +28,10 @@ import useGetUser from "@/features/user/useGetUser";
 import { shortenName } from "@/utils/helper";
 import useGetSK from "@/features/SK/useGetSK";
 
-export const Sidebar = () => {
-  const { user } = useGetUser();
-  const { SK, isLoadingSK } = useGetSK();
 
+export const Sidebar = () => {
+  const { SK, isLoadingSK } = useGetSK();
+  const { user } = useGetUser();
   const location = useLocation();
   const { setOpenMobile, isMobile, open } = useSidebar();
 
@@ -120,6 +120,7 @@ export const Sidebar = () => {
   ];
 
   const handleLinkClick = () => isMobile && setOpenMobile(false);
+
 
   if (!user?.data || isLoadingSK) return null;
 

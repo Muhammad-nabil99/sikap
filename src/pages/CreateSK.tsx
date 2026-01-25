@@ -70,6 +70,7 @@ const CreateSK: React.FC = () => {
     handleSubmit,
     control,
     reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     mode: "onChange",
@@ -244,7 +245,14 @@ const CreateSK: React.FC = () => {
                       <Input
                         type="number"
                         className="h-11 pl-10 bg-slate-50/50"
-                        {...register("gaji_pokok", { required: "Wajib diisi" })}
+                        {...register("gaji_pokok", {
+                          required: "Wajib diisi",
+                          valueAsNumber: true,
+                          min: {
+                            value: 1,
+                            message: "gaji pokok tidak boleh 0",
+                          },
+                        })}
                       />
                     </div>
                     <ErrorMessage message={errors.gaji_pokok?.message} />
@@ -278,6 +286,7 @@ const CreateSK: React.FC = () => {
                       className="h-11 bg-slate-50/50"
                       {...register("tanggal_sk", { required: "Wajib diisi" })}
                     />
+                    <ErrorMessage message={errors.tanggal_sk?.message} />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-[11px] font-bold uppercase text-slate-400">
@@ -288,6 +297,7 @@ const CreateSK: React.FC = () => {
                       className="h-11 bg-slate-50/50"
                       {...register("tmt_golongan", { required: "Wajib diisi" })}
                     />
+                    <ErrorMessage message={errors.tmt_golongan?.message} />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-[11px] font-bold uppercase text-slate-400">
@@ -295,8 +305,9 @@ const CreateSK: React.FC = () => {
                     </Label>
                     <Input
                       className="h-11 bg-slate-50/50"
-                      {...register("jenis_kp")}
+                      {...register("jenis_kp", { required: "Wajib diisi" })}
                     />
+                    <ErrorMessage message={errors.jenis_kp?.message} />
                   </div>
                 </div>
               </FormSection>
@@ -309,8 +320,11 @@ const CreateSK: React.FC = () => {
                     </Label>
                     <Input
                       className="h-11 bg-slate-50/50 font-mono text-sm"
-                      {...register("nomor_pertek_bkn")}
+                      {...register("nomor_pertek_bkn", {
+                        required: "Wajib diisi",
+                      })}
                     />
+                    <ErrorMessage message={errors.nomor_pertek_bkn?.message} />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-[11px] font-bold uppercase text-slate-400">
@@ -319,7 +333,12 @@ const CreateSK: React.FC = () => {
                     <Input
                       type="date"
                       className="h-11 bg-slate-50/50"
-                      {...register("tanggal_pertek_bkn")}
+                      {...register("tanggal_pertek_bkn", {
+                        required: "Wajib diisi",
+                      })}
+                    />
+                    <ErrorMessage
+                      message={errors.tanggal_pertek_bkn?.message}
                     />
                   </div>
                   <div className="space-y-2">
@@ -329,66 +348,82 @@ const CreateSK: React.FC = () => {
                     <Input
                       type="date"
                       className="h-11 bg-slate-50/50"
-                      {...register("kgb_terakhir")}
+                      {...register("kgb_terakhir", { required: "Wajib diisi" })}
                     />
+                    <ErrorMessage message={errors.kgb_terakhir?.message} />
                   </div>
                   <div className="grid grid-cols-2 gap-3 sm:col-span-2">
-                    <div className="space-y-2">
-                      <Label className="text-[11px] font-bold uppercase text-slate-400 text-nowrap">
-                        Masa Kerja (Thn)
-                      </Label>
-                      <Input
-                        type="number"
-                        min={0}
-                        className="h-11 bg-slate-50/50"
-                        {...register("masa_gk_tahunan", {
-                          valueAsNumber: true,
-                          min: {
-                            value: 0,
-                            message:
-                              "Masa kerja tidak boleh kurang dari 0 tahun",
-                          },
-                        })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[11px] font-bold uppercase text-slate-400 text-nowrap">
-                        Masa Kerja (Bln)
-                      </Label>
-                      <Controller
-                        control={control}
-                        name="masa_gk_bulanan"
-                        render={({ field }) => (
-                          <Select
-                            value={field.value?.toString() ?? ""}
-                            onValueChange={(value) =>
-                              field.onChange(Number(value))
-                            }
-                            onOpenChange={(open) => {
-                              if (open) {
-                                window.scrollTo({
-                                  top: 0,
-                                  behavior: "smooth",
-                                });
+                    <div className="grid grid-cols-2 gap-3 sm:col-span-2">
+                      {/* Field: Masa Kerja (Tahun) */}
+                      <div className="space-y-2">
+                        <Label className="text-[11px] font-bold uppercase text-slate-400 text-nowrap">
+                          Masa Kerja (Thn)
+                        </Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          className="h-11 bg-slate-50/50"
+                          {...register("masa_gk_tahunan", {
+                            required: "Wajib diisi", // Adds the "not empty" check
+                            valueAsNumber: true,
+                            min: {
+                              value: 0,
+                              message:
+                                "Masa kerja tidak boleh kurang dari 0 tahun",
+                            },
+                          })}
+                        />
+                        {/* Corrected to match the name "masa_gk_tahunan" */}
+                        <ErrorMessage
+                          message={errors.masa_gk_tahunan?.message}
+                        />
+                      </div>
+
+                      {/* Field: Masa Kerja (Bulan) */}
+                      <div className="space-y-2">
+                        <Label className="text-[11px] font-bold uppercase text-slate-400 text-nowrap">
+                          Masa Kerja (Bln)
+                        </Label>
+                        <Controller
+                          control={control}
+                          name="masa_gk_bulanan"
+                          rules={{ required: "Wajib diisi" }} // Already has the "not empty" check
+                          render={({ field }) => (
+                            <Select
+                              value={field.value?.toString() ?? ""}
+                              onValueChange={(value) =>
+                                field.onChange(Number(value))
                               }
-                            }}
-                          >
-                            <SelectTrigger className="h-11 bg-slate-50/50">
-                              <SelectValue placeholder="Pilih bulan" />
-                            </SelectTrigger>
-                            <SelectContent
-                              position="popper"
-                              className="max-h-60 overflow-y-auto z-50"
+                              onOpenChange={(open) => {
+                                if (open) {
+                                  window.scrollTo({
+                                    top: 0,
+                                    behavior: "smooth",
+                                  });
+                                }
+                              }}
                             >
-                              {[...Array(13)].map((_, i) => (
-                                <SelectItem key={i} value={i.toString()}>
-                                  {i}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        )}
-                      />
+                              <SelectTrigger className="h-11 bg-slate-50/50">
+                                <SelectValue placeholder="Pilih bulan" />
+                              </SelectTrigger>
+                              <SelectContent
+                                position="popper"
+                                className="max-h-60 overflow-y-auto z-50"
+                              >
+                                {[...Array(13)].map((_, i) => (
+                                  <SelectItem key={i} value={i.toString()}>
+                                    {i}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+                        {/* Added the ErrorMessage which was missing for this field in your snippet */}
+                        <ErrorMessage
+                          message={errors.masa_gk_bulanan?.message}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -86,7 +86,6 @@ export async function loginUserAPI(user: { nip: number; password: string }) {
     return data;
   } catch (error) {
     console.log("tidak dapat melakukan login", error.message);
-    throw error;
   }
 }
 export async function getUserAPI(): Promise<Pegawai> {
