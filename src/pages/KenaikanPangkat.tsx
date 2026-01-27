@@ -16,7 +16,6 @@ import {
   Calendar,
   AlertCircle,
 } from "lucide-react";
-import { BASE_DOCUMENT } from "@/utils/config";
 import useCreateBerkasKenaikanPangkatPNS from "@/features/berkas/PNS/useCreateBerkasKenaikanPangkatPNS";
 import useUpdateBerkasKenaikanPangkatPNS from "@/features/berkas/PNS/useUpdateBerkasKenaikanPangkatPNS";
 import useGetBerkasKenaikanPangkatPNS from "@/features/berkas/PNS/useGetDataBerkasKenaikanPangkatPNS";
@@ -207,8 +206,6 @@ function KenaikanPangkat() {
     const formData = new FormData();
     formData.append(config.fieldName, file);
 
-    console.log(`📤 Uploading ${config.label}:`, file.name);
-
     if (config.isSingleFile) {
       // CPNS & PNS - Single file logic
       const existingData = config.getData?.data;
@@ -235,6 +232,8 @@ function KenaikanPangkat() {
         console.log(`✏️ Updating ${config.label} ID:`, currentYearBerkas.id);
         config.onUpdate({ id: currentYearBerkas.id, formData });
       } else {
+        console.log("test mengetik");
+
         console.log(`➕ Creating new ${config.label}`);
         config.onCreate(formData);
       }
@@ -247,7 +246,41 @@ function KenaikanPangkat() {
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {documentConfigs.map((config) => {
+              console.log("config", config);
+
               const fileInputRef = useRef<HTMLInputElement>(null);
+
+              // Show loading skeleton if data is still loading
+              if (config.isLoading) {
+                return (
+                  <div key={config.key} className="flex flex-col group">
+                    <div className="flex items-center justify-between mb-3 px-1">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-slate-300 p-1.5 rounded-lg animate-pulse">
+                          <BookText className="w-4 h-4 text-white" />
+                        </div>
+                        <h2 className="text-sm font-bold text-slate-700 uppercase tracking-tight">
+                          Dokumen {config.label}
+                        </h2>
+                      </div>
+                      <div className="h-6 w-24 bg-slate-200 rounded-full animate-pulse"></div>
+                    </div>
+
+                    <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                      <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-xl mb-4">
+                        <div className="bg-white p-3 rounded-lg border shadow-sm animate-pulse">
+                          <FileText className="w-7 h-7 text-slate-300" />
+                        </div>
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-slate-200 rounded animate-pulse w-3/4"></div>
+                          <div className="h-3 bg-slate-200 rounded animate-pulse w-1/2"></div>
+                        </div>
+                      </div>
+                      <div className="h-12 bg-slate-100 rounded-xl animate-pulse"></div>
+                    </div>
+                  </div>
+                );
+              }
 
               // Handle both single file and array data
               let existingFileUrl: string | undefined;
@@ -289,11 +322,13 @@ function KenaikanPangkat() {
                       new Date(a.created_at).getTime(),
                   );
 
-                existingFileUrl = config?.getData?.data;
-                // existingFileUrl = currentYearBerkas?.[config.fieldName];
+                existingFileUrl = config?.getData?.data?.filter(
+                  (item) =>
+                    Number(new Date(item?.created_at).getFullYear()) ==
+                    new Date()?.getFullYear(),
+                )?.[0]?.file;
 
                 hasFile = !!existingFileUrl;
-                // console.log(`${config.label} hasfile`, );
               }
 
               const isActionLoading = config.isCreating || config.isUpdating;
@@ -349,7 +384,7 @@ function KenaikanPangkat() {
                           className={`text-sm font-bold truncate ${hasSubmited ? "text-blue-900" : "text-amber-900"}`}
                         >
                           {hasSubmited
-                            ? `${config.label} ${"currentYear"}.pdf`
+                            ? `${config.label} ${new Date().getFullYear()}.pdf`
                             : "Berkas Kosong"}
                         </p>
                         <p
@@ -425,7 +460,7 @@ function KenaikanPangkat() {
                                 const fileYear = new Date(
                                   file.created_at,
                                 ).getFullYear();
-                                const fileUrl = file[config.fieldName];
+                                const fileUrl = file?.file;
 
                                 return (
                                   <div

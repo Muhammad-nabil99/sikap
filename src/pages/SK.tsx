@@ -183,10 +183,10 @@ const SK = () => {
 // Reusable Sub-Component for cleaner look
 const DetailItem = ({ label, value }) => (
   <div className="group">
-    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-500 transition-colors">
+    <p className=" text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-500 transition-colors">
       {label}
     </p>
-    <p className="text-sm font-bold text-slate-700 break-words">
+    <p className="capitalize text-sm font-bold text-slate-700 break-words">
       {value || (
         <span className="text-slate-300 italic font-normal">
           Data tidak tersedia

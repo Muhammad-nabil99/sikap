@@ -113,6 +113,7 @@ const CreateSK: React.FC = () => {
     isDataAvailable
       ? onUpdateSK({ id: SK.data[0].id, ...payload })
       : onCreateSK(payload);
+
   };
 
   if (isLoadingSK) return <SKSkeleton />;
@@ -236,7 +237,7 @@ const CreateSK: React.FC = () => {
 
                   <div className="space-y-2">
                     <Label className="text-[11px] font-bold uppercase text-slate-400">
-                      Gaji Pokok
+                      Gaji Pokok (SK terakhir)
                     </Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">
@@ -387,13 +388,14 @@ const CreateSK: React.FC = () => {
                         <Controller
                           control={control}
                           name="masa_gk_bulanan"
-                          rules={{ required: "Wajib diisi" }} // Already has the "not empty" check
+                          rules={{ required: "Wajib diisi" }}
                           render={({ field }) => (
                             <Select
-                              value={field.value?.toString() ?? ""}
-                              onValueChange={(value) =>
-                                field.onChange(Number(value))
-                              }
+                              value={field.value?.toString() ?? "0"}
+                              onValueChange={(value) => {
+                                console.log("value", value); // Changed from Number(value)
+                                field.onChange(value); // Store as string, not Number
+                              }}
                               onOpenChange={(open) => {
                                 if (open) {
                                   window.scrollTo({
@@ -412,7 +414,9 @@ const CreateSK: React.FC = () => {
                               >
                                 {[...Array(13)].map((_, i) => (
                                   <SelectItem key={i} value={i.toString()}>
-                                    {i}
+                                    {" "}
+                                    {/* Changed from i.toFixed() */}
+                                    {i} bulan {/* Better display */}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
