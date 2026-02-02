@@ -10,8 +10,7 @@ function useUpdateBerkasKenaikanPangkatJabatan() {
     mutate: onUpdateBerkasKenaikanPangkatJabatan,
     isPending: isUpdatingBerkasKenaikanPangkatJabatan,
   } = useMutation({
-    mutationFn: ({ id, formData }: { id: number; formData: FormData }) =>
-      UPDATE_BERKAS_KENAIKAN_PANGKAT_JABATAN_API(id, formData),
+    mutationFn: UPDATE_BERKAS_KENAIKAN_PANGKAT_JABATAN_API,
     onSuccess: () => {
       toast.success("Berhasil Edit");
       //  navigate('/berkas')

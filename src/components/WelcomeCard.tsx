@@ -1,21 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  MapPin,
-  Calendar,
-  Award,
-  Building2,
-  CreditCard,
-  Sparkles,
-} from "lucide-react";
+import { Calendar, Building2, CreditCard } from "lucide-react";
 import useGetUser from "@/features/user/useGetUser";
 import { shortenName } from "@/utils/helper";
 
 export const WelcomeCard = () => {
   const { user, isLoadingUser } = useGetUser();
-
-  console.log("user", user);
 
   if (isLoadingUser) {
     return (
@@ -49,7 +40,6 @@ export const WelcomeCard = () => {
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-bl-full"></div>
       <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-tr-full"></div>
-
 
       <div className="relative p-8 md:p-10">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8">

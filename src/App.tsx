@@ -20,6 +20,12 @@ import DataPegawai from "./pages/DataPegawai";
 import CreateDataPegawai from "./pages/CreateDataPegawai";
 import KenaikanPangkat from "./pages/KenaikanPangkat";
 import SignUp from "./pages/SignUp";
+import ArsipBerkala from "./pages/ArsipBerkala";
+import ArsipKenaikanPangkat from "./pages/ArsipKenaikanPangkat";
+import ArsipPensiun from "./pages/ArsipPensiun";
+import CreateKenaikanPangkat from "./pages/CreateKenaikanPangkat";
+import GetAllBerkas from "./features/berkas/GET_ALL_BERKAS/GetAllBerkas";
+import UploadBerkasGuard from "./components/UploadBerkasGuard";
 
 const App = () => {
   return (
@@ -68,11 +74,22 @@ const App = () => {
             >
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Index />} />
-              <Route path="berkas/kenaikan-pangkat" element={<KenaikanPangkat />} />
+              <Route
+                path="berkas/kenaikan-pangkat"
+                element={<KenaikanPangkat />}
+              />
               <Route path="berkas/berkala" element={<Berkala />} />
               <Route path="berkas/pensiun" element={<Pensiun />} />
               <Route path="berkas/:id" element={<BerkasDetail />} />
-              <Route  
+              <Route
+                path="unggah-berkas"
+                element={
+                  // <UploadBerkasGuard>
+                  <CreateKenaikanPangkat />
+                  // </UploadBerkasGuard>
+                }
+              />
+              <Route
                 path="berkas/tambah"
                 element={
                   <CreateBerkas isOpen={null} berkas={null} setOpen={null} />
@@ -83,8 +100,17 @@ const App = () => {
               <Route path="progress" element={<ProgressDocument />} />
               <Route path="status" element={<CekStatus />} />
               <Route path="data-pegawai" element={<DataPegawai />} />
-              <Route path="data-pegawai/tambah" element={<CreateDataPegawai />} />
-              <Route path="arsip" element={<Arsip />} />
+
+              <Route
+                path="data-pegawai/tambah"
+                element={<CreateDataPegawai />}
+              />
+              <Route path="arsip/pensiun" element={<ArsipPensiun />} />
+              <Route path="arsip/berkala" element={<ArsipBerkala />} />
+              <Route
+                path="arsip/kenaikan-pangkat"
+                element={<ArsipKenaikanPangkat />}
+              />
             </Route>
             <Route path="/login" element={<SignIn />} />
             <Route path="/register" element={<SignUp />} />

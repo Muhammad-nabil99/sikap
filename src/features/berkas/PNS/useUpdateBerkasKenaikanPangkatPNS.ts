@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 function useUpdateBerkasKenaikanPangkatPNS() {
   //    const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate: onUpdateBerkasKenaikanPangkatPNS, isPending: isUpdatingBerkasKenaikanPangkatPNS } = useMutation({
-    mutationFn: ({ id, formData }: { id: number; formData: FormData }) =>
-      UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(id, formData),
+  const {
+    mutate: onUpdateBerkasKenaikanPangkatPNS,
+    isPending: isUpdatingBerkasKenaikanPangkatPNS,
+  } = useMutation({
+    mutationFn: UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API,
     onSuccess: () => {
       toast.success("Berhasil Edit");
       //  navigate('/berkas')
@@ -19,6 +21,9 @@ function useUpdateBerkasKenaikanPangkatPNS() {
     },
   });
 
-  return { onUpdateBerkasKenaikanPangkatPNS, isUpdatingBerkasKenaikanPangkatPNS };
+  return {
+    onUpdateBerkasKenaikanPangkatPNS,
+    isUpdatingBerkasKenaikanPangkatPNS,
+  };
 }
 export default useUpdateBerkasKenaikanPangkatPNS;

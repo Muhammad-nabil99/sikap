@@ -1,3 +1,4 @@
+import { UPDATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API } from "@/services/Berkas/GAJI_BERKALA/BERKAS_GAJI_BERKALA_API";
 import { UPDATE_BERKAS_KENAIKAN_PANGKAT_JABATAN_API } from "@/services/Berkas/JABATAN/BERKAS_JABATAN_API";
 import { UPDATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API } from "@/services/Berkas/PANGKAT_TERAKHIR/BERKAS_PANGKAT_TERAKHIR_API";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,8 +11,7 @@ function useUpdateBerkasKenaikanPangkatGajiBerkala() {
     mutate: onUpdateBerkasKenaikanPangkatGajiBerkala,
     isPending: isUpdatingBerkasKenaikanPangkatGajiBerkala,
   } = useMutation({
-    mutationFn: ({ id, formData }: { id: number; formData: FormData }) =>
-      UPDATE_BERKAS_KENAIKAN_PANGKAT_JABATAN_API(id, formData),
+    mutationFn: UPDATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API,
     onSuccess: () => {
       toast.success("Berhasil Edit");
       //  navigate('/berkas')

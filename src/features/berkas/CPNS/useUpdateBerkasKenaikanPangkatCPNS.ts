@@ -4,17 +4,16 @@ import toast from "react-hot-toast";
 
 function useUpdateBerkasKenaikanPangkatCPNS() {
   const queryClient = useQueryClient();
-  
-  const { 
-    mutate: onUpdateBerkasKenaikanPangkatCPNS, 
-    isPending: isUpdatingBerkasKenaikanPangkatCPNS 
+
+  const {
+    mutate: onUpdateBerkasKenaikanPangkatCPNS,
+    isPending: isUpdatingBerkasKenaikanPangkatCPNS,
   } = useMutation({
-    mutationFn: ({ id, formData }: { id: number; formData: FormData }) =>
-      UPDATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(id, formData),
+    mutationFn: UPDATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API,
     onSuccess: (data) => {
       console.log("✅ Update berhasil:", data);
       toast.success("SK CPNS berhasil diperbarui");
-      
+
       // Invalidate to refetch
       queryClient.invalidateQueries({ queryKey: ["berkas-cpns"] });
     },
@@ -24,9 +23,9 @@ function useUpdateBerkasKenaikanPangkatCPNS() {
     },
   });
 
-  return { 
-    onUpdateBerkasKenaikanPangkatCPNS, 
-    isUpdatingBerkasKenaikanPangkatCPNS 
+  return {
+    onUpdateBerkasKenaikanPangkatCPNS,
+    isUpdatingBerkasKenaikanPangkatCPNS,
   };
 }
 

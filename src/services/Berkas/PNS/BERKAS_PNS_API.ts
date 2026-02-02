@@ -33,7 +33,7 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_PNS_API<BERKAS_TYPE>() {
   const token = JSON.parse(getToken);
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pns`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pns`,
       {
         method: "GET",
         headers: {
@@ -54,21 +54,19 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_PNS_API<BERKAS_TYPE>() {
   }
 }
 export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(
-  id: number,
   formData: FormData,
 ) {
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
     await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pns/update`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pns/update`,
       {
         method: "POST",
         credentials: "include",
         headers: {
           Authorization: `Bearer ${token}`,
         },
-
         body: formData,
       },
     );
@@ -79,11 +77,12 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(
 export async function CREATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(
   formData: FormData,
 ) {
+  
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pns`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pns`,
       {
         method: "POST",
 

@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Banknote,
   Info,
+  AlertCircle,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ import useCreateSK from "@/features/SK/useCreateSK";
 import useUpdateSK from "@/features/SK/useUpdateSK";
 import SKSkeleton from "@/components/SKSkeleton";
 import { cn } from "@/lib/utils";
+import { CAN_I_UPLOAD } from "@/utils/helper";
 
 // Fixed TypeScript interfaces
 interface FormData {
@@ -56,6 +58,8 @@ interface ErrorMessageProps {
 }
 
 const CreateSK: React.FC = () => {
+  const { CAN_UPLOAD } = CAN_I_UPLOAD();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { onDeleteSK, isDeletingSK } = useDeleteSK();
   const { SK, isLoadingSK } = useGetSK();
@@ -94,12 +98,20 @@ const CreateSK: React.FC = () => {
     if (SK?.data?.[0]) {
       const data = SK.data[0];
 
+      // Gunakan reset untuk mengisi form saat data tersedia
       reset({
-        ...data,
+        golongan_ruang: data.golongan_ruang || "",
+        pangkat: data.pangkat || "",
         gaji_pokok: Number(data.gaji_pokok) || 0,
-        masa_gk_tahunan: Number(data.masa_gk_tahunan) || 0,
-
+        nomor_sk: data.nomor_sk || "",
+        tanggal_sk: data.tanggal_sk || "",
+        tmt_golongan: data.tmt_golongan || "",
+        jenis_kp: data.jenis_kp || "",
+        nomor_pertek_bkn: data.nomor_pertek_bkn || "",
+        tanggal_pertek_bkn: data.tanggal_pertek_bkn || "",
+        kgb_terakhir: data.kgb_terakhir || "",
         masa_gk_bulanan: String(data.masa_gk_bulanan ?? "0"),
+        masa_gk_tahunan: Number(data.masa_gk_tahunan) || 0,
       });
     }
   }, [SK, reset]);
@@ -113,7 +125,6 @@ const CreateSK: React.FC = () => {
     isDataAvailable
       ? onUpdateSK({ id: SK.data[0].id, ...payload })
       : onCreateSK(payload);
-
   };
 
   if (isLoadingSK) return <SKSkeleton />;
@@ -289,17 +300,87 @@ const CreateSK: React.FC = () => {
                     />
                     <ErrorMessage message={errors.tanggal_sk?.message} />
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-[11px] font-bold uppercase text-slate-400">
+                  {/* testing */}
+                  <div
+                    className={cn(
+                      "space-y-2 relative rounded-xl transition-all duration-300",
+                      !CAN_UPLOAD &&
+                        "p-4 bg-gradient-to-br from-red-50 via-orange-50 to-amber-50 border-2 border-red-300 shadow-lg shadow-red-100",
+                    )}
+                  >
+                    {/* Animated corner badge */}
+                    {!CAN_UPLOAD && (
+                      <div className="absolute -top-3 -right-3 z-10">
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-red-500 rounded-full blur-md animate-pulse"></div>
+                          <div className="relative bg-gradient-to-br from-red-600 to-orange-600 text-white text-[9px] font-extrabold px-3 py-1.5 rounded-full shadow-xl flex items-center gap-1.5 animate-bounce">
+                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping absolute"></span>
+                            <AlertCircle className="w-3 h-3 relative" />
+                            WAJIB UPDATE
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <Label
+                      className={cn(
+                        "text-[11px] font-bold uppercase tracking-wide flex items-center gap-2",
+                        !CAN_UPLOAD ? "text-red-700" : "text-slate-400",
+                      )}
+                    >
                       TMT Golongan
+                      {!CAN_UPLOAD && (
+                        <span className="flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-[9px]">
+                          <span className="w-1 h-1 bg-red-500 rounded-full animate-pulse"></span>
+                          Required
+                        </span>
+                      )}
                     </Label>
-                    <Input
-                      type="date"
-                      className="h-11 bg-slate-50/50"
-                      {...register("tmt_golongan", { required: "Wajib diisi" })}
-                    />
+
+                    <div className="relative group">
+                      {/* ✅ FIXED: Glowing border effect moved BEHIND with pointer-events-none */}
+                      {!CAN_UPLOAD && (
+                        <>
+                          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-red-500 via-orange-500 to-red-500 blur-lg opacity-30 animate-pulse rounded-lg pointer-events-none"></div>
+                          <div className="absolute -inset-1 -z-10 bg-gradient-to-r from-red-400 to-orange-400 rounded-lg opacity-20 blur-sm group-hover:opacity-40 transition-opacity pointer-events-none"></div>
+                        </>
+                      )}
+
+                      {/* ✅ Input is now on top and clickable */}
+                      <Input
+                        type="date"
+                        className={cn(
+                          "h-11 transition-all duration-300 relative z-10",
+                          !CAN_UPLOAD
+                            ? "bg-white border-2 border-red-400 focus:border-red-600 focus:ring-4 focus:ring-red-100 shadow-md"
+                            : "bg-slate-50/50 border-slate-200",
+                        )}
+                        {...register("tmt_golongan", {
+                          required: "Wajib diisi",
+                        })}
+                      />
+                    </div>
+
+                    {!CAN_UPLOAD && (
+                      <div className="flex items-start gap-2.5 p-3 bg-white/80 backdrop-blur-sm border border-red-200 rounded-lg shadow-sm">
+                        <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center shadow-md">
+                          <AlertCircle className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="flex-1 space-y-1">
+                          <p className="text-xs font-bold text-red-900">
+                            ⚠️ Perlu Diperbarui
+                          </p>
+                          <p className="text-[11px] text-red-700 leading-relaxed">
+                            TMT Golongan harus diisi terlebih dahulu sebelum
+                            dapat mengunggah dokumen.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     <ErrorMessage message={errors.tmt_golongan?.message} />
                   </div>
+                  {/* end testing */}
                   <div className="space-y-2">
                     <Label className="text-[11px] font-bold uppercase text-slate-400">
                       Jenis Kenaikan Pangkat

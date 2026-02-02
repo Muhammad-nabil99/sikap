@@ -20,12 +20,12 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API() {
   if (!getToken) {
     return { status: "error", message: "No token", data: [] };
   }
-  
+
   const token = JSON.parse(getToken);
-  
+
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pangkat-terakhir`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pangkat-terakhir`,
       {
         method: "GET",
         headers: {
@@ -35,11 +35,11 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API() {
         credentials: "include",
       },
     );
-    
+
     if (!response.ok) {
       throw new Error("Failed to retrieve SK Pangkat Terakhir data");
     }
-    
+
     const result = await response.json();
     return result;
   } catch (error) {
@@ -56,12 +56,12 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API(
   if (!getToken) {
     throw new Error("No authentication token found");
   }
-  
+
   const token = JSON.parse(getToken);
-  
+
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pangkat-terakhir`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pangkat-terakhir`,
       {
         method: "POST",
         headers: {
@@ -71,12 +71,12 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API(
         body: formData,
       },
     );
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Failed to create SK Pangkat Terakhir: ${errorText}`);
     }
-    
+
     const data = await response.json();
     return data;
   } catch (error) {
@@ -87,19 +87,18 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API(
 
 // UPDATE - Update specific record by ID
 export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API(
-  id: number,
   formData: FormData,
 ) {
   const getToken = localStorage.getItem("token");
   if (!getToken) {
     throw new Error("No authentication token found");
   }
-  
+
   const token = JSON.parse(getToken);
-  
+
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-pangkat-terakhir/update`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pangkat-terakhir/update`,
       {
         method: "POST",
         credentials: "include",
@@ -109,12 +108,13 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API(
         body: formData,
       },
     );
-    
+
     if (!response.ok) {
       throw new Error("Failed to update SK Pangkat Terakhir");
     }
-    
+
     const data = await response.json();
+
     return data;
   } catch (error) {
     console.error("❌ UPDATE SK Pangkat Terakhir Error:", error);

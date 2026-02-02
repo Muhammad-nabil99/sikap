@@ -1,9 +1,10 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   Home,
   FileText,
   User,
+  Upload,
   UserCircle,
   History,
   X,
@@ -27,9 +28,14 @@ import favicon from "@/assets/favicon.ico";
 import useGetUser from "@/features/user/useGetUser";
 import { shortenName } from "@/utils/helper";
 import useGetSK from "@/features/SK/useGetSK";
-
+import GetAllBerkas from "@/features/berkas/GET_ALL_BERKAS/GetAllBerkas";
 
 export const Sidebar = () => {
+  const documentConfigs = GetAllBerkas();
+  const isAllUploaded = !documentConfigs?.every(
+    (item) => item?.getData?.data,
+  );
+
   const { SK, isLoadingSK } = useGetSK();
   const { user } = useGetUser();
   const location = useLocation();
@@ -38,6 +44,9 @@ export const Sidebar = () => {
   // Logical state for dropdowns
   const [openBerkas, setOpenBerkas] = useState(
     location.pathname.startsWith("/berkas"),
+  );
+  const [openArsip, setOpenArsip] = useState(
+    location.pathname.startsWith("/arsip"),
   );
 
   // Validation Logic data pegawai
@@ -91,10 +100,20 @@ export const Sidebar = () => {
       alert: hasEmptySK,
     },
     {
+      id: "upload_berkas",
+      link: "/unggah-berkas",
+      icon: Upload,
+      label: "Unggah Berkas",
+      alert: hasEmptySK,
+    },
+    {
       id: "berkas",
       link: "/berkas",
       icon: FileText,
       label: "Manajemen Berkas",
+      setIsOpenMenuList: setOpenBerkas,
+      isMenuOpen: openBerkas,
+      hasUploadFile: isAllUploaded,
       children: [
         {
           id: "pensiun",
@@ -116,11 +135,37 @@ export const Sidebar = () => {
         },
       ],
     },
-    { id: "arsip", link: "/arsip", icon: History, label: "Arsip Digital" },
+    {
+      id: "arsip",
+      link: "/arsip",
+      icon: History,
+      label: "Arsip",
+      setIsOpenMenuList: setOpenArsip,
+      isMenuOpen: openArsip,
+      children: [
+        {
+          id: "pensiun",
+          link: "/arsip/pensiun",
+          icon: HandCoins,
+          label: "Pensiun",
+        },
+        {
+          id: "berkala",
+          link: "/arsip/berkala",
+          icon: TrendingUp,
+          label: "Gaji Berkala",
+        },
+        {
+          id: "pangkat",
+          link: "/arsip/kenaikan-pangkat",
+          icon: ArrowUpRight,
+          label: "Kenaikan Pangkat",
+        },
+      ],
+    },
   ];
 
   const handleLinkClick = () => isMobile && setOpenMobile(false);
-
 
   if (!user?.data || isLoadingSK) return null;
 
@@ -167,13 +212,13 @@ export const Sidebar = () => {
               location.pathname === item.link ||
               (item.children && location.pathname.startsWith(item.link));
             const hasChildren = item.children?.length > 0;
-
+            if (item?.hasUploadFile) return;
             return (
               <SidebarMenuItem key={item.id} className="list-none">
                 {hasChildren ? (
                   <>
                     <button
-                      onClick={() => setOpenBerkas(!openBerkas)}
+                      onClick={() => item?.setIsOpenMenuList(!item?.isMenuOpen)}
                       className={cn(
                         "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                         isActive
@@ -195,7 +240,7 @@ export const Sidebar = () => {
                       <ChevronDown
                         className={cn(
                           "w-4 h-4 transition-transform",
-                          openBerkas && "rotate-180",
+                          item?.isMenuOpen && "rotate-180",
                         )}
                       />
                     </button>
@@ -204,7 +249,7 @@ export const Sidebar = () => {
                     <div
                       className={cn(
                         "overflow-hidden transition-all duration-300",
-                        openBerkas ? "max-h-40 mt-1" : "max-h-0",
+                        item?.isMenuOpen ? "max-h-40 mt-1" : "max-h-0",
                       )}
                     >
                       <div className="ml-9 space-y-1 border-l-2 border-slate-100 pl-4">

@@ -11,7 +11,6 @@ function useCreateBerkasKenaikanPangkatCPNS() {
   } = useMutation({
     mutationFn: CREATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API,
     onSuccess: (data) => {
-      console.log("✅ Upload berhasil:", data);
       toast.success("SK CPNS berhasil diupload");
       
       // Invalidate to refetch data

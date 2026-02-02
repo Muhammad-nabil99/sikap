@@ -1,3 +1,5 @@
+import useGetSK from "@/features/SK/useGetSK";
+
 export const listGolonganRuang = [
   "I/A",
   "I/B",
@@ -66,7 +68,7 @@ export function golonganRuang(ruang: string) {
     "Pembina Utama",
   ];
   const findIndex = listGolonganRuang.findIndex(
-    (item) => item?.toLowerCase() == `${ruang}`?.toLowerCase()
+    (item) => item?.toLowerCase() == `${ruang}`?.toLowerCase(),
   );
 
   return { pangkat: pangkatLama[findIndex] };
@@ -74,6 +76,31 @@ export function golonganRuang(ruang: string) {
 
 export function updateGolonganRuang(golongan_ruang) {
   return listGolonganRuang.findIndex(
-    (golongan) => golongan?.toLowerCase() == `${golongan_ruang}`?.toLowerCase()
+    (golongan) => golongan?.toLowerCase() == `${golongan_ruang}`?.toLowerCase(),
   );
+}
+export function CAN_I_UPLOAD() {
+  const { SK, isLoadingSK } = useGetSK();
+  if (isLoadingSK || !SK?.data?.length) {
+    return {
+      canUpload: false,
+      promotionDate: null,
+      uploadEnabledDate: null,
+      isLoading: true,
+    };
+  }
+  const TMT_GOLONGAN = new Date(SK?.data?.[0]?.tmt_golongan);
+  const PROMOTION_DATE = new Date(TMT_GOLONGAN);
+  PROMOTION_DATE.setFullYear(PROMOTION_DATE.getFullYear() + 4);
+  // Subtract 3 months to get the date when upload should be enabled
+  const UPLOAD_ENABLED_DATE = new Date(PROMOTION_DATE);
+  UPLOAD_ENABLED_DATE.setMonth(UPLOAD_ENABLED_DATE.getMonth() - 3);
+  // Check if current date is on or after the upload enabled date
+  const TODAY = new Date("10/10/2030");
+  return {
+    CAN_UPLOAD: TODAY <= UPLOAD_ENABLED_DATE,
+    PROMOTION_DATE,
+    UPLOAD_ENABLED_DATE,
+    isLoadingSK: false,
+  };
 }

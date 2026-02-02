@@ -22,7 +22,7 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API() {
   
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-gaji-berkala`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-gaji-berkala`,
       {
         method: "GET",
         headers: {
@@ -57,7 +57,7 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API(
   
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-gaji-berkala`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-gaji-berkala`,
       {
         method: "POST",
         headers: {
@@ -82,7 +82,6 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API(
 }
 
 export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API(
-  id: number,
   formData: FormData,
 ) {
   const getToken = localStorage.getItem("token");
@@ -94,7 +93,7 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API(
   
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-gaji-berkala/update`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-gaji-berkala/update`,
       {
         method: "POST",
         credentials: "include",

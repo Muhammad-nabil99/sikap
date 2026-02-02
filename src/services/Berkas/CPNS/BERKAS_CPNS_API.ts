@@ -17,12 +17,12 @@ export interface BERKAS_CPNS_RESPONSE {
 export async function GET_BERKAS_KENAIKAN_PANGKAT_CPNS_API() {
   const getToken = localStorage.getItem("token");
   if (!getToken) return { status: "error", message: "No token", data: null };
-  
+
   const token = JSON.parse(getToken);
-  
+
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-cpns`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-cpns`,
       {
         method: "GET",
         headers: {
@@ -32,11 +32,11 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_CPNS_API() {
         credentials: "include",
       },
     );
-    
+
     if (!response.ok) {
       throw new Error("Failed to retrieve SK CPNS data");
     }
-    
+
     const result = await response.json();
     return result;
   } catch (error) {
@@ -46,15 +46,17 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_CPNS_API() {
 }
 
 // CREATE - Returns the file URL
-export async function CREATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(formData: FormData) {
+export async function CREATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(
+  formData: FormData,
+) {
   const getToken = localStorage.getItem("token");
   if (!getToken) throw new Error("No authentication token found");
-  
+
   const token = JSON.parse(getToken);
-  
+
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-cpns`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-cpns`,
       {
         method: "POST",
         headers: {
@@ -64,12 +66,12 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(formData: FormData
         body: formData,
       },
     );
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Failed to create SK CPNS: ${errorText}`);
     }
-    
+
     const data = await response.json();
     return data;
   } catch (error) {
@@ -79,32 +81,32 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(formData: FormData
 }
 
 // UPDATE
-export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(
-  id: number,
-  formData: FormData,
-) {
+export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(formData) {
+  console.log("formdata", formData);
+
   const getToken = localStorage.getItem("token");
   if (!getToken) throw new Error("No authentication token found");
-  
+
   const token = JSON.parse(getToken);
-  
+
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/kenaikan-pangkat/sk-cpns/update`,
+      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-cpns/update`,
       {
         method: "POST",
         credentials: "include",
         headers: {
           Authorization: `Bearer ${token}`,
+          // "Content-Type": "application/json",
         },
         body: formData,
       },
     );
-    
+
     if (!response.ok) {
       throw new Error("Failed to update SK CPNS");
     }
-    
+
     const data = await response.json();
     return data;
   } catch (error) {
