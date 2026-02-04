@@ -203,7 +203,7 @@ function Berkala() {
               }
 
               // getData.data is now a string (file URL) or null
-              const fileUrl = config.getData?.data;
+              const fileUrl = config.getData?.data?.[0]?.[config?.key];
               const hasSubmitted = !!fileUrl;
               const isActionLoading = config.isCreating || config.isUpdating;
 

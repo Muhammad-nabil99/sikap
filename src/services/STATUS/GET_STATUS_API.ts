@@ -13,7 +13,7 @@ export async function GET_STATUS_BERKAS_API() {
         credentials: "include",
       },
     );
-    if (!response.ok) throw new Error("Failed to login");
+    if (!response.ok) return { data: { status: 0 }, status: "success" };
     const data = await response.json();
 
     return data;

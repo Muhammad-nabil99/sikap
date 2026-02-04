@@ -3,7 +3,6 @@ type StatusPayload = {
 };
 
 export async function UPDATE_STATUS_API(payload: StatusPayload) {
-
   const token = JSON.parse(localStorage.getItem("token") || "");
   const res = await fetch(
     "https://dashboardsikap.btikpsultra.my.id/api/berkas/status",

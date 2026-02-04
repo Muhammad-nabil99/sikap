@@ -1,42 +1,71 @@
-import { useRef, useState } from "react";
-
-import {
-  BookText,
-  CheckCircle2,
-  FileText,
-  ExternalLink,
-  RefreshCcw,
-  Upload,
-  AlertCircle,
-} from "lucide-react";
-import toast from "react-hot-toast";
 import NewDocumentUpload from "@/components/NewDocumentUpload";
 import GetAllBerkas from "@/features/berkas/GET_ALL_BERKAS/GetAllBerkas";
 import useGetStatus from "@/features/status/useGetStatus";
 import useUpdateStatus from "@/features/status/useUpdateStatus";
 import { CAN_I_UPLOAD } from "@/utils/helper";
+import {
+  AlertCircle,
+  BookText,
+  CheckCircle2,
+  ExternalLink,
+  FileText,
+  RefreshCcw,
+  Upload,
+} from "lucide-react";
+import { useRef } from "react";
+import toast from "react-hot-toast";
 
-// Type definition for document config
-export type DocumentConfig = {
-  key: string;
-  label: string;
-  fieldName: string;
-  getData: { data?: unknown } | undefined;
-  onCreate: (formData: FormData) => void;
-  onUpdate: (formData: FormData) => void;
-  isCreating: boolean;
-  isUpdating: boolean;
-  isLoading: boolean;
-};
-
+// ✅ FIXED CreateKenaikanPangkat Component
 function CreateKenaikanPangkat() {
-  const { CAN_UPLOAD, PROMOTION_DATE, UPLOAD_ENABLED_DATE } = CAN_I_UPLOAD();
+  const { CAN_UPLOAD, PROMOTION_DATE, UPLOAD_ENABLED_DATE, TMT_GOLONGAN } =
+    CAN_I_UPLOAD();
   const { onUpdateStatusBerkas, isUpdatingStatusBerkas } = useUpdateStatus();
   const { status, isLoadingStatus } = useGetStatus();
+
   const NEW_UPLOAD_DOCUMENT = Boolean(status);
   const documentConfigs = GetAllBerkas();
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
-  console.log("documentConfigs", documentConfigs);
+  console.log('NEW_UPLOAD_DOCUMENT',NEW_UPLOAD_DOCUMENT);
+  
+  // ✅ FIXED: Correct logic - check if array is empty or doesn't exist
+  const HAS_NOT_UPLOADED = documentConfigs?.every(
+    (item) => !item?.getData?.data || item?.getData?.data.length === 0,
+  );
+
+  // Check if all documents are locked (already submitted and locked)
+  const HAS_UPLOADED_AND_LOCKED = documentConfigs?.every(
+    (item) => item?.getData?.data?.[0]?.is_locked === true,
+  );
+
+  // ✅ NEW: Check if TMT Golongan has changed since last upload
+  const TMT_HAS_CHANGED = (() => {
+    if (!TMT_GOLONGAN || HAS_NOT_UPLOADED) return false;
+
+    // Check any document's upload data
+    const anyDocument = documentConfigs?.find(
+      (item) => item?.getData?.data && item.getData.data.length > 0,
+    );
+
+    if (!anyDocument) return false;
+
+    const lastUploadDate = new Date(anyDocument.getData.data[0].tanggal_upload);
+    const currentTMT = new Date(TMT_GOLONGAN);
+
+    // If current TMT is after the last upload date, TMT has changed
+    return currentTMT > lastUploadDate;
+  })();
+
+  // ✅ FIXED: Determine when to show NewDocumentUpload screen
+  // Show NewDocumentUpload when:
+  // 1. User has never uploaded (HAS_NOT_UPLOADED) - they need to fill TMT first
+  // 2. Upload window is not open yet (!CAN_UPLOAD) - too early to upload
+  // 3. Documents are already locked (HAS_UPLOADED_AND_LOCKED) - already submitted
+  // 4. NEW_UPLOAD_DOCUMENT is false (status is 0) - form not opened yet
+
+  const SHOULD_SHOW_NEW_UPLOAD_SCREEN =
+    !NEW_UPLOAD_DOCUMENT || // Form not opened yet
+    HAS_UPLOADED_AND_LOCKED || // Already submitted and locked
+    (HAS_NOT_UPLOADED && !CAN_UPLOAD); // Never uploaded and not in upload window
 
   // Handle File Upload
   const handleFileUpload = (
@@ -50,9 +79,12 @@ function CreateKenaikanPangkat() {
       toast.error("Hanya file PDF yang diperbolehkan");
       return;
     }
+
     const formData = new FormData();
     formData.append(config.fieldName, file);
-    if (config.getData?.data && NEW_UPLOAD_DOCUMENT) {
+
+    // If file exists and we're in update mode, update; otherwise create
+    if (config.getData?.data?.[0]?.[config?.key]) {
       config.onUpdate(formData);
     } else {
       config.onCreate(formData);
@@ -68,13 +100,17 @@ function CreateKenaikanPangkat() {
     });
   };
 
-  if (!NEW_UPLOAD_DOCUMENT) {
-    return (
+
+  // ✅ FIXED: Show NewDocumentUpload with correct conditions
+  if (SHOULD_SHOW_NEW_UPLOAD_SCREEN) {
+    return ( 
       <NewDocumentUpload
-        canIUpload={CAN_UPLOAD}
+        canIUpload={CAN_UPLOAD || HAS_NOT_UPLOADED} // Can upload OR needs to set TMT
         status={NEW_UPLOAD_DOCUMENT}
         onUpdateStatusBerkas={onUpdateStatusBerkas}
         isUpdatingStatusBerkas={isUpdatingStatusBerkas}
+        hasNotUploaded={HAS_NOT_UPLOADED}
+        tmtHasChanged={TMT_HAS_CHANGED}
       />
     );
   }
@@ -83,25 +119,21 @@ function CreateKenaikanPangkat() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
       <div className="min-h-screen bg-slate-50 p-4 md:p-8">
         <div className="max-w-5xl mx-auto">
-          {/* Info Banner */}
-          {CAN_UPLOAD && (
+          {/* ✅ Info Banner - Show when in upload window or TMT changed */}
+          {(CAN_UPLOAD || TMT_HAS_CHANGED) && (
             <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5" />
                 <div className="flex-1">
                   <h3 className="text-sm font-bold text-amber-900 mb-1">
-                    Unggahan Belum Tersedia
+                    {TMT_HAS_CHANGED
+                      ? "TMT Golongan Telah Berubah - Perbarui Dokumen"
+                      : "Periode Unggahan Aktif"}
                   </h3>
                   <p className="text-xs text-amber-700">
-                    Anda dapat mengunggah dokumen mulai tanggal{" "}
-                    <span className="font-bold">
-                      {formatDate(UPLOAD_ENABLED_DATE)}
-                    </span>{" "}
-                    (3 bulan sebelum tanggal kenaikan pangkat:{" "}
-                    <span className="font-bold">
-                      {formatDate(PROMOTION_DATE)}
-                    </span>
-                    )
+                    {TMT_HAS_CHANGED
+                      ? "Sistem mendeteksi perubahan TMT Golongan. Silakan unggah ulang semua dokumen."
+                      : `Anda dapat mengunggah dokumen mulai ${formatDate(UPLOAD_ENABLED_DATE)} hingga ${formatDate(PROMOTION_DATE)}`}
                   </p>
                 </div>
               </div>
@@ -113,6 +145,7 @@ function CreateKenaikanPangkat() {
               if (config.isLoading) {
                 return (
                   <div key={config.key} className="flex flex-col group">
+                    {/* Loading skeleton - keep your existing code */}
                     <div className="flex items-center justify-between mb-3 px-1">
                       <div className="flex items-center gap-2">
                         <div className="bg-slate-300 p-1.5 rounded-lg animate-pulse">
@@ -124,7 +157,6 @@ function CreateKenaikanPangkat() {
                       </div>
                       <div className="h-6 w-24 bg-slate-200 rounded-full animate-pulse"></div>
                     </div>
-
                     <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                       <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-xl mb-4">
                         <div className="bg-white p-3 rounded-lg border shadow-sm animate-pulse">
@@ -141,18 +173,19 @@ function CreateKenaikanPangkat() {
                 );
               }
 
-              // getData.data is now a record object or null
-              const record = config.getData?.data;
-              const fileUrl = record ? (record as any)[config.fieldName] : null;
+              const fileUrl = config.getData?.data?.[0]?.[config?.key];
               const hasSubmitted = !!fileUrl;
               const isActionLoading = config.isCreating || config.isUpdating;
+
+              // ✅ NEW: Determine if document needs amber warning (TMT changed)
+              const needsUpdate = hasSubmitted && TMT_HAS_CHANGED;
 
               return (
                 <div key={config.key} className="flex flex-col group">
                   <input
                     type="file"
                     hidden
-                    ref={(el) => (fileInputRefs.current[config.key] = el)} // ✅ CHANGED: Store ref using config.key
+                    ref={(el) => (fileInputRefs.current[config.key] = el)}
                     accept=".pdf"
                     onChange={(e) => handleFileUpload(e, config)}
                   />
@@ -160,7 +193,13 @@ function CreateKenaikanPangkat() {
                   <div className="flex items-center justify-between mb-3 px-1">
                     <div className="flex items-center gap-2">
                       <div
-                        className={`${hasSubmitted ? "bg-blue-600" : "bg-amber-400"} p-1.5 rounded-lg transition-colors duration-300`}
+                        className={`${
+                          needsUpdate
+                            ? "bg-amber-500"
+                            : hasSubmitted
+                              ? "bg-blue-600"
+                              : "bg-amber-400"
+                        } p-1.5 rounded-lg transition-colors duration-300`}
                       >
                         <BookText className="w-4 h-4 text-white" />
                       </div>
@@ -168,7 +207,13 @@ function CreateKenaikanPangkat() {
                         Dokumen {config.label}
                       </h2>
                     </div>
-                    {hasSubmitted ? (
+
+                    {/* ✅ Status badges with TMT change warning */}
+                    {needsUpdate ? (
+                      <span className="flex items-center gap-1.5 text-[10px] font-black text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-200 animate-pulse">
+                        <AlertCircle className="w-3.5 h-3.5" /> PERLU UPDATE
+                      </span>
+                    ) : hasSubmitted ? (
                       <span className="flex items-center gap-1.5 text-[10px] font-black text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
                         <CheckCircle2 className="w-3.5 h-3.5" /> TERISI
                       </span>
@@ -183,24 +228,44 @@ function CreateKenaikanPangkat() {
                     {/* Current File */}
                     <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-xl mb-4">
                       <div
-                        className={`bg-white p-3 rounded-lg border shadow-sm transition-colors ${hasSubmitted ? "text-blue-600 border-blue-100" : "text-amber-500 border-amber-100"}`}
+                        className={`bg-white p-3 rounded-lg border shadow-sm transition-colors ${
+                          needsUpdate
+                            ? "text-amber-600 border-amber-100"
+                            : hasSubmitted
+                              ? "text-blue-600 border-blue-100"
+                              : "text-amber-500 border-amber-100"
+                        }`}
                       >
                         <FileText className="w-7 h-7" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p
-                          className={`text-sm font-bold truncate ${hasSubmitted ? "text-blue-900" : "text-amber-900"}`}
+                          className={`text-sm font-bold truncate ${
+                            needsUpdate
+                              ? "text-amber-900"
+                              : hasSubmitted
+                                ? "text-blue-900"
+                                : "text-amber-900"
+                          }`}
                         >
                           {hasSubmitted
                             ? `${config.label}.pdf`
                             : "Berkas Kosong"}
                         </p>
                         <p
-                          className={`text-[11px] font-medium ${hasSubmitted ? "text-blue-600/70" : "text-amber-600/80"}`}
+                          className={`text-[11px] font-medium ${
+                            needsUpdate
+                              ? "text-amber-600/80"
+                              : hasSubmitted
+                                ? "text-blue-600/70"
+                                : "text-amber-600/80"
+                          }`}
                         >
-                          {hasSubmitted
-                            ? "File tersimpan di sistem"
-                            : "Silahkan unggah berkas Anda"}
+                          {needsUpdate
+                            ? "Perlu diperbarui - TMT berubah"
+                            : hasSubmitted
+                              ? "File tersimpan di sistem"
+                              : "Silahkan unggah berkas Anda"}
                         </p>
                       </div>
                     </div>
@@ -217,8 +282,8 @@ function CreateKenaikanPangkat() {
                         <button
                           onClick={() =>
                             fileInputRefs.current[config.key]?.click()
-                          } // ✅ CHANGED: Access ref using config.key
-                          disabled={isActionLoading || CAN_UPLOAD}
+                          }
+                          disabled={isActionLoading}
                           className="flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <RefreshCcw className="w-3.5 h-3.5" /> Ganti
@@ -228,7 +293,7 @@ function CreateKenaikanPangkat() {
 
                     {!hasSubmitted && (
                       <button
-                        disabled={isActionLoading || hasSubmitted}
+                        disabled={isActionLoading}
                         onClick={() =>
                           fileInputRefs.current[config.key]?.click()
                         }
@@ -236,8 +301,6 @@ function CreateKenaikanPangkat() {
                       >
                         {isActionLoading ? (
                           <span className="animate-pulse">Memproses...</span>
-                        ) : hasSubmitted ? (
-                          <span className="text-xs">Belum Dapat Diunggah</span>
                         ) : (
                           <>
                             <Upload className="w-4 h-4" /> Unggah Sekarang

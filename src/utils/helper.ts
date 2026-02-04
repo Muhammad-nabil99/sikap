@@ -81,26 +81,36 @@ export function updateGolonganRuang(golongan_ruang) {
 }
 export function CAN_I_UPLOAD() {
   const { SK, isLoadingSK } = useGetSK();
+  
   if (isLoadingSK || !SK?.data?.length) {
     return {
-      canUpload: false,
-      promotionDate: null,
-      uploadEnabledDate: null,
-      isLoading: true,
+      CAN_UPLOAD: false,
+      PROMOTION_DATE: null,
+      UPLOAD_ENABLED_DATE: null,
+      TMT_GOLONGAN: null,
+      isLoadingSK: true,
     };
   }
+
   const TMT_GOLONGAN = new Date(SK?.data?.[0]?.tmt_golongan);
   const PROMOTION_DATE = new Date(TMT_GOLONGAN);
   PROMOTION_DATE.setFullYear(PROMOTION_DATE.getFullYear() + 4);
-  // Subtract 3 months to get the date when upload should be enabled
+  
+  // Upload window: 3 months before 4-year promotion date
   const UPLOAD_ENABLED_DATE = new Date(PROMOTION_DATE);
   UPLOAD_ENABLED_DATE.setMonth(UPLOAD_ENABLED_DATE.getMonth() - 3);
-  // Check if current date is on or after the upload enabled date
-  const TODAY = new Date("10/10/2030");
+  
+  // For testing - change this back to new Date() for production
+  const TODAY = new Date();
+  
+  // ✅ FIXED: Upload is enabled when TODAY is >= UPLOAD_ENABLED_DATE
+  const CAN_UPLOAD = TODAY >= UPLOAD_ENABLED_DATE && TODAY < PROMOTION_DATE;
+
   return {
-    CAN_UPLOAD: TODAY <= UPLOAD_ENABLED_DATE,
+    CAN_UPLOAD,
     PROMOTION_DATE,
     UPLOAD_ENABLED_DATE,
+    TMT_GOLONGAN,
     isLoadingSK: false,
   };
 }

@@ -8,8 +8,9 @@ function useGetStatus() {
     refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
+  
 
-  const status = data?.data?.status;
+  const status = data?.data?.status ;
   
 
   return { isLoadingStatus, status };

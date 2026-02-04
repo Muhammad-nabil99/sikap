@@ -54,7 +54,7 @@ function KenaikanPangkat() {
 
     // Check if file already exists (data is not null)
 
-    if (config.getData?.data) {
+    if (config.getData?.data?.[0]?.[config?.key]) {
       // Create new file
       config.onCreate(formData);
     } else {
@@ -135,7 +135,7 @@ function KenaikanPangkat() {
                 );
               }
               // getData.data is now a string (file URL) or null
-              const fileUrl = config.getData?.data;
+              const fileUrl = config.getData?.data?.[0]?.[config?.key];
               const hasSubmitted = !!fileUrl;
               const isActionLoading = config.isCreating || config.isUpdating;
               return (

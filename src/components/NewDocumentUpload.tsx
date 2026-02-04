@@ -13,6 +13,7 @@ function NewDocumentUpload({
   isUpdatingStatusBerkas,
   canIUpload,
 }) {
+
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-center min-h-[450px] w-full p-4">
