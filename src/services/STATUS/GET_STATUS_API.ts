@@ -11,14 +11,21 @@ export async function GET_STATUS_BERKAS_API() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-      },
+      }
     );
-    if (!response.ok) return { data: { status: 0 }, status: "success" };
+
+    // ✅ Handle 404 - first time user: form is CLOSED
+    if (response.status === 404) {
+      return { data: { status: 0 } };
+    }
+
+    if (!response.ok) throw new Error("Failed to login");
     const data = await response.json();
 
     return data;
   } catch (error) {
     console.log("tidak dapat menemukan user", error);
-    throw error;
+    // ✅ Return default when error occurs
+    return { data: { status: 0 } };
   }
 }

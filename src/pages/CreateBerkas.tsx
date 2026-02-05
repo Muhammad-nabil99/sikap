@@ -1,5 +1,8 @@
+import useCreateBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useCreateBerkasKenaikanPangkatCPNS";
 import useCreateBerkas from "@/features/berkas/CPNS/useCreateBerkasKenaikanPangkatCPNS";
+import useGetBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
 import useGetBerkas from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
+import useUpdateBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useUpdateBerkasKenaikanPangkatCPNS";
 import useUpdateBerkas from "@/features/berkas/CPNS/useUpdateBerkasKenaikanPangkatCPNS";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -14,11 +17,21 @@ export type FormInputs = {
 };
 
 function CreateBerkas({ berkas, isOpen, setOpen }) {
+  
   const modalRef = useRef<HTMLFormElement | null>(null);
   const isUpdating = Boolean(berkas);
-  const { onCreateBerkas, isCreatingBerkas } = useCreateBerkas();
-  const { onUpdateBerkas, isUpdatingBerkas } = useUpdateBerkas();
-  const { berkas: getBerkas, isLoadingBerkas } = useGetBerkas();
+  const {
+    onCreateBerkasKenaikanPangkatCPNS,
+    isCreatingBerkasKenaikanPangkatCPNS,
+  } = useCreateBerkasKenaikanPangkatCPNS();
+  const {
+    onUpdateBerkasKenaikanPangkatCPNS,
+    isUpdatingBerkasKenaikanPangkatCPNS,
+  } = useUpdateBerkasKenaikanPangkatCPNS();
+  const {
+    getBerkasKenaikanPangkatCPNS,
+    isLoadingGetBerkasKenaikanPangkatCPNS,
+  } = useGetBerkasKenaikanPangkatCPNS();
   const {
     register,
     handleSubmit,
@@ -41,6 +54,7 @@ function CreateBerkas({ berkas, isOpen, setOpen }) {
 
   function handleSubmitDataKP(data: FormInputs) {
     if (isUpdating) {
+      
       const formData = new FormData();
       if (data.sk_cpns instanceof FileList && data.sk_cpns.length > 0)
         formData.append("sk_cpns", data.sk_cpns[0]);
@@ -58,7 +72,7 @@ function CreateBerkas({ berkas, isOpen, setOpen }) {
         formData.append("sk_pangkat_terakhir", data.sk_pangkat_terakhir[0]);
       if (data.sk_jabatan instanceof FileList && data.sk_jabatan.length > 0)
         formData.append("sk_jabatan", data.sk_jabatan[0]);
-      onUpdateBerkas({ id: berkas?.data[0].id, formData });
+      onUpdateBerkasKenaikanPangkatCPNS({ id: berkas?.data[0].id, formData });
       return;
     }
 
@@ -68,10 +82,13 @@ function CreateBerkas({ berkas, isOpen, setOpen }) {
     formData.append("sk_gaji_berkala", data.sk_gaji_berkala[0]);
     formData.append("sk_pangkat_terakhir", data.sk_pangkat_terakhir[0]);
     formData.append("sk_jabatan", data.sk_jabatan[0]);
-    onCreateBerkas(formData);
+    onCreateBerkasKenaikanPangkatCPNS(formData);
   }
 
-  const isLoading = isCreatingBerkas || isLoadingBerkas || isUpdatingBerkas;
+  const isLoading =
+    isCreatingBerkasKenaikanPangkatCPNS ||
+    isLoadingGetBerkasKenaikanPangkatCPNS ||
+    isUpdatingBerkasKenaikanPangkatCPNS;
 
   return (
     <div

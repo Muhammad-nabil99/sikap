@@ -16,7 +16,6 @@ import { DocumentConfig } from "./KenaikanPangkat";
 import useCreateBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useCreateBerkasKenaikanPangkatCPNS";
 import useUpdateBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useUpdateBerkasKenaikanPangkatCPNS";
 import useGetBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
-import { Data } from "./ArsipKenaikanPangkat";
 
 interface History {
   id: number;
@@ -30,7 +29,7 @@ interface History {
 
 function ArsipBerkala() {
   const THIS_YEAR = new Date().getFullYear();
-  
+
   // CPNS Hooks
   const {
     onCreateBerkasKenaikanPangkatCPNS,
@@ -188,11 +187,11 @@ function ArsipBerkala() {
         {/* Content */}
         <div className="space-y-3 px-4">
           <h3 className="text-xl font-bold text-slate-800">
-            Belum Ada Arsip Dokumen
+            Belum Ada Arsip Dokumen Berkala
           </h3>
           <p className="capitalize text-slate-500 text-sm leading-relaxed max-w-sm mx-auto">
-            Arsip dokumen berkala Anda akan muncul di sini setelah
-            dokumen tahun sebelumnya tersimpan di sistem.
+            Arsip dokumen berkala Anda akan muncul di sini setelah dokumen tahun
+            sebelumnya tersimpan di sistem.
           </p>
         </div>
 
@@ -210,6 +209,7 @@ function ArsipBerkala() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {documentConfigs?.map((document) => {
         // Only process berkala documents
+        
         if (!berkalaDocument.includes(document?.key)) return null;
 
         // Filter documents from previous years
@@ -275,7 +275,7 @@ function ArsipBerkala() {
 
     // Check if there are any documents from previous years
     return document?.getData?.data?.some(
-      (item: Data) => new Date(item?.created_at).getFullYear() < THIS_YEAR
+      (item: Data) => new Date(item?.created_at).getFullYear() < THIS_YEAR,
     );
   });
 
@@ -299,7 +299,7 @@ function ArsipBerkala() {
               <History className="w-4 h-4 text-white" />
             </div>
             <h2 className="text-lg font-bold text-slate-800 uppercase tracking-tight">
-              Arsip
+              Arsip Berkala
             </h2>
           </div>
           {hasAnyArchive ? <ArsipBerkalaCard /> : <EmptyCard />}

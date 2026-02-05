@@ -266,20 +266,13 @@ function Berkala() {
                     </div>
 
                     {hasSubmitted && (
-                      <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div className="grid grid-cols-1 gap-3 mb-3">
                         <button
                           onClick={() => window.open(fileUrl, "_blank")}
                           disabled={!hasSubmitted}
                           className="flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all"
                         >
                           <ExternalLink className="w-3.5 h-3.5" /> Lihat
-                        </button>
-                        <button
-                          onClick={() => fileInputRefs.current[config.key]?.click()} // ✅ CHANGED: Access ref using config.key
-                          disabled={isActionLoading || !CAN_UPLOAD}
-                          className="flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          <RefreshCcw className="w-3.5 h-3.5" /> Ganti
                         </button>
                       </div>
                     )}

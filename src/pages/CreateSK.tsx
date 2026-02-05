@@ -30,6 +30,8 @@ import useUpdateSK from "@/features/SK/useUpdateSK";
 import SKSkeleton from "@/components/SKSkeleton";
 import { cn } from "@/lib/utils";
 import { CAN_I_UPLOAD } from "@/utils/helper";
+import useUpdateStatus from "@/features/status/useUpdateStatus";
+import useGetStatus from "@/features/status/useGetStatus";
 
 // Fixed TypeScript interfaces
 interface FormData {
@@ -125,6 +127,7 @@ const CreateSK: React.FC = () => {
     isDataAvailable
       ? onUpdateSK({ id: SK.data[0].id, ...payload })
       : onCreateSK(payload);
+
   };
 
   if (isLoadingSK) return <SKSkeleton />;

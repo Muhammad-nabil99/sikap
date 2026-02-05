@@ -33,7 +33,6 @@ function KenaikanPangkat() {
   const { CAN_UPLOAD, PROMOTION_DATE, UPLOAD_ENABLED_DATE } = CAN_I_UPLOAD();
   const documentConfigs = GetAllBerkas();
   const { status, isLoadingStatus } = useGetStatus();
-  const NEW_UPLOAD_DOCUMENT = Boolean(status);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Handle File Upload

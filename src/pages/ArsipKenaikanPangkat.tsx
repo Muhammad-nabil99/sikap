@@ -17,12 +17,6 @@ import useCreateBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useCreate
 import useUpdateBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useUpdateBerkasKenaikanPangkatCPNS";
 import useGetBerkasKenaikanPangkatCPNS from "@/features/berkas/CPNS/useGetDataBerkasKenaikanPangkatCPNS";
 
-export interface Data {
-  id: number;
-  file: string;
-  created_at: string;
-}
-
 interface History {
   id: number;
   sk_pns: string;
@@ -35,6 +29,7 @@ interface History {
 
 function ArsipKenaikanPangkat() {
   const THIS_YEAR = new Date().getFullYear();
+
   // CPNS Hooks
   const {
     onCreateBerkasKenaikanPangkatCPNS,
@@ -160,7 +155,11 @@ function ArsipKenaikanPangkat() {
       isLoading: isLoadingGetBerkasKenaikanPangkatGajiBerkala,
     },
   ];
+
   const [isPending, setIsPending] = React.useState(false);
+
+  // Define which documents should be shown in berkala archives
+  const berkalaDocument = ["sk_pangkat_terakhir", "sk_gaji_berkala"];
 
   if (isPending) {
     return (
@@ -172,26 +171,56 @@ function ArsipKenaikanPangkat() {
     );
   }
 
-  const hasAnyArchive = documentConfigs?.some((document) => {
-    return (
-      document?.getData?.data?.length !== 0 &&
-      document?.getData?.data?.some(
-        (item: Data) =>
-          new Date(item?.created_at).getFullYear() != new Date().getFullYear(),
-      )
-    );
-  });
+  const EmptyCard = () => (
+    <div className="flex items-center justify-center py-16">
+      <div className="max-w-md w-full text-center">
+        {/* Icon Container */}
+        <div className="relative inline-block mb-6">
+          <div className="absolute -top-3 -right-3 w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+            <History className="w-5 h-5 text-amber-600" />
+          </div>
+          <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-8 rounded-3xl border-2 border-dashed border-slate-200 shadow-sm">
+            <FileText className="w-20 h-20 text-slate-300 mx-auto" />
+          </div>
+        </div>
 
-  const ArsipKenaikanPangkatCard = () => (
+        {/* Content */}
+        <div className="space-y-3 px-4">
+          <h3 className="text-xl capitalize font-bold text-slate-800">
+            Belum Ada Arsip Dokumen kenaikan pangkat
+          </h3>
+          <p className="capitalize text-slate-500 text-sm leading-relaxed max-w-sm mx-auto">
+            Arsip dokumen kenaikan pangkat Anda akan muncul di sini setelah
+            dokumen tahun sebelumnya tersimpan di sistem.
+          </p>
+        </div>
+
+        {/* Decorative Element */}
+        <div className="mt-8 flex items-center justify-center gap-2">
+          <div className="h-1 w-8 bg-amber-200 rounded-full"></div>
+          <div className="h-1 w-12 bg-amber-300 rounded-full"></div>
+          <div className="h-1 w-8 bg-amber-200 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ArsipBerkalaCard = () => (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {documentConfigs?.map((document) => {
+        // Only process berkala documents
+
+        if (!berkalaDocument.includes(document?.key)) return null;
+
+        // Filter documents from previous years
         const archiveDocuments =
           document?.getData?.data?.filter((item: Data) => {
-            if (new Date(item?.created_at).getFullYear() < THIS_YEAR)
-              return item;
+            return new Date(item?.created_at).getFullYear() < THIS_YEAR;
           }) || [];
 
-        if (archiveDocuments?.length == 0) return null;
+        // Skip if no archive documents
+        if (archiveDocuments?.length === 0) return null;
+
         return (
           <div
             key={document?.key}
@@ -239,39 +268,16 @@ function ArsipKenaikanPangkat() {
     </div>
   );
 
-  const EmptyCard = () => (
-    <div className="flex items-center justify-center py-16">
-      <div className="max-w-md w-full text-center">
-        {/* Icon Container */}
-        <div className="relative inline-block mb-6">
-          <div className="absolute -top-3 -right-3 w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-            <History className="w-5 h-5 text-amber-600" />
-          </div>
-          <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-8 rounded-3xl border-2 border-dashed border-slate-200 shadow-sm">
-            <FileText className="w-20 h-20 text-slate-300 mx-auto" />
-          </div>
-        </div>
+  // Check if there are any berkala archives
+  const hasAnyArchive = documentConfigs?.some((document) => {
+    // Only check berkala documents
+    if (!berkalaDocument.includes(document?.key)) return false;
 
-        {/* Content */}
-        <div className="space-y-3 px-4">
-          <h3 className="text-xl font-bold text-slate-800">
-            Belum Ada Arsip Dokumen
-          </h3>
-          <p className="capitalize text-slate-500 text-sm leading-relaxed max-w-sm mx-auto">
-            Arsip dokumen kenaikan pangkat Anda akan muncul di sini setelah
-            dokumen tahun sebelumnya tersimpan di sistem.
-          </p>
-        </div>
-
-        {/* Decorative Element */}
-        <div className="mt-8 flex items-center justify-center gap-2">
-          <div className="h-1 w-8 bg-amber-200 rounded-full"></div>
-          <div className="h-1 w-12 bg-amber-300 rounded-full"></div>
-          <div className="h-1 w-8 bg-amber-200 rounded-full"></div>
-        </div>
-      </div>
-    </div>
-  );
+    // Check if there are any documents from previous years
+    return document?.getData?.data?.some(
+      (item: Data) => new Date(item?.created_at).getFullYear() < THIS_YEAR,
+    );
+  });
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans antialiased">
@@ -282,7 +288,7 @@ function ArsipKenaikanPangkat() {
             Arsip Dokumen Kenaikan Pangkat
           </h1>
           <p className="text-slate-500 mt-1 capitalize">
-            Kelola dokumen Arsip kenaikan pangkat Anda.
+            Kelola dokumen Arsip Kenaikan Pangkat Anda.
           </p>
         </div>
 
@@ -293,13 +299,14 @@ function ArsipKenaikanPangkat() {
               <History className="w-4 h-4 text-white" />
             </div>
             <h2 className="text-lg font-bold text-slate-800 uppercase tracking-tight">
-              Arsip
+              Arsip Kenaikan Pangkat
             </h2>
           </div>
-          {hasAnyArchive ? <ArsipKenaikanPangkatCard /> : <EmptyCard />}
+          {hasAnyArchive ? <ArsipBerkalaCard /> : <EmptyCard />}
         </section>
       </div>
     </div>
   );
 }
+
 export default ArsipKenaikanPangkat;

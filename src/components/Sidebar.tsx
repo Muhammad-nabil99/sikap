@@ -32,9 +32,7 @@ import GetAllBerkas from "@/features/berkas/GET_ALL_BERKAS/GetAllBerkas";
 
 export const Sidebar = () => {
   const documentConfigs = GetAllBerkas();
-  const isAllUploaded = !documentConfigs?.every(
-    (item) => item?.getData?.data,
-  );
+  const isAllUploaded = !documentConfigs?.every((item) => item?.getData?.data);
 
   const { SK, isLoadingSK } = useGetSK();
   const { user } = useGetUser();
@@ -64,6 +62,9 @@ export const Sidebar = () => {
   const hasEmptyUserData = REQUIRED_FIELDS_DATA_PEGAWAI.some(
     (key) => !user?.data?.[key]?.toString().trim(),
   );
+  const HAS_NOT_UPLOADED = documentConfigs?.every(
+    (item) => item?.getData?.data.length < 0,
+  );
   // Validation Logic sk
   const REQUIRED_FIELDS_SK = [
     "tanggal_sk",
@@ -82,7 +83,7 @@ export const Sidebar = () => {
   const hasEmptySK =
     !SK ||
     REQUIRED_FIELDS_SK?.some((key) => !SK?.data?.[0]?.[key]?.toString().trim());
-
+  
   const menuItems = [
     { id: "dash", link: "/dashboard", icon: Home, label: "Dashboard" },
     {
@@ -104,7 +105,7 @@ export const Sidebar = () => {
       link: "/unggah-berkas",
       icon: Upload,
       label: "Unggah Berkas",
-      alert: hasEmptySK,
+      alert: HAS_NOT_UPLOADED,
     },
     {
       id: "berkas",

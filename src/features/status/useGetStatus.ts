@@ -7,11 +7,11 @@ function useGetStatus() {
     queryKey: ["status"],
     refetchOnMount: true,
     refetchOnWindowFocus: false,
+    retry: false, // ✅ Don't retry on 404
+    // ✅ Return default value when query fails
   });
   
-
-  const status = data?.data?.status ;
-  
+  const status = data?.data?.status;
 
   return { isLoadingStatus, status };
 }

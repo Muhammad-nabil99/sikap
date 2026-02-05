@@ -48,12 +48,31 @@ const RELIGION_OPTIONS = [
 ];
 
 const WORK_UNIT_OPTIONS = [
-  { value: "bidang_sma", label: "Bidang SMA" },
-  { value: "bidang_smk", label: "Bidang SMK" },
-  { value: "bidang_pklk", label: "Bidang PK-LK" },
+  { value: "bidang_perencanaan", label: "Bidang Perencanaan" },
   { value: "bidang_gtk", label: "Bidang GTK" },
-  { value: "bpp", label: "Bidang Perencanaan dan Penganggaran" },
+  { value: "bidang_sma", label: "Bidang SMA" },
+  { value: "bidang_smk_pklk", label: "Bidang SMK - PKLK" },
   { value: "bidang_kebudayaan", label: "Bidang Kebudayaan" },
+  { value: "humas", label: "Humas" },
+  { value: "kepegawaian_keuangan", label: "Kepegawaian dan Keuangan" },
+  { value: "uptd_btikp", label: "UPTD BTIKP" },
+  { value: "uptd_museum_taman_budaya", label: "UPTD Museum dan Taman Budaya" },
+  {
+    value: "uptd_penanganan_siswa_berkebutuhan_khusus",
+    label: "UPTD Penanganan Siswa Berkebutuhan Khusus",
+  },
+  { value: "kcd_konawe_konut", label: "KCD Konawe - Konut" },
+  { value: "kcd_kolaka_koltim", label: "KCD Kolaka - Koltim" },
+  { value: "kcd_kolaka_utara", label: "KCD Kolaka Utara" },
+  { value: "kcd_bombana", label: "KCD Bombana" },
+  { value: "kcd_konkep", label: "KCD Konkep" },
+  { value: "kcd_muna", label: "KCD Muna" },
+  { value: "kcd_mubar_buteng", label: "KCD Mubar - Buteng" },
+  { value: "kcd_baubau_buton_selatan", label: "KCD Baubau - Buton Selatan" },
+  { value: "kcd_buton", label: "KCD Buton" },
+  { value: "kcd_wakatobi", label: "KCD Wakatobi" },
+  { value: "kcd_butur", label: "KCD Butur" },
+  { value: "kcd_konsel", label: "KCD Konsel" },
 ];
 
 const INITIAL_FORM_STATE: ProfileFormData = {
@@ -208,22 +227,43 @@ const FormActions: React.FC<{
   onCancel?: () => void;
   isSubmitting?: boolean;
 }> = ({ onCancel, isSubmitting = false }) => (
-  <div className="lg:col-span-3 flex justify-end gap-4 mt-6 pt-6 border-t border-gray-200">
+  <div
+    className="
+      lg:col-span-3 
+      flex flex-col-reverse sm:flex-row 
+      sm:justify-end 
+      gap-3 sm:gap-4 
+      mt-6 pt-6 
+      border-t border-gray-200
+    "
+  >
     <Button
       type="button"
       variant="outline"
       onClick={onCancel}
-      className="px-8 py-3 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold"
+      className="
+        w-full sm:w-auto
+        px-8 py-3 
+        border-gray-300 text-gray-700 
+        hover:bg-gray-50 
+        font-semibold
+      "
     >
       <XIcon className="w-4 h-4 mr-2" />
       Batal
     </Button>
+
     <Button
       type="submit"
       disabled={isSubmitting}
-      className="px-8 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 
-                 text-white font-semibold shadow-lg hover:shadow-xl 
-                 transform hover:-translate-y-0.5 transition-all"
+      className="
+        w-full sm:w-auto
+        px-8 py-3 
+        bg-blue-600 hover:bg-blue-700 active:bg-blue-800 
+        text-white font-semibold 
+        shadow-lg hover:shadow-xl 
+        transform hover:-translate-y-0.5 transition-all
+      "
     >
       <Save className="w-4 h-4 mr-2" />
       {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}

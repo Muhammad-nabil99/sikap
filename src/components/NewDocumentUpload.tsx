@@ -8,12 +8,10 @@ import {
 import { useNavigate } from "react-router-dom";
 
 function NewDocumentUpload({
-  status,
   onUpdateStatusBerkas,
   isUpdatingStatusBerkas,
   canIUpload,
 }) {
-
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-center min-h-[450px] w-full p-4">
@@ -97,7 +95,7 @@ function NewDocumentUpload({
         {canIUpload && (
           <button
             disabled={isUpdatingStatusBerkas}
-            onClick={() => onUpdateStatusBerkas({ status: !status })}
+            onClick={() => onUpdateStatusBerkas({ status: 1 })}
             className="
               relative mt-10 px-10 py-4 bg-blue-600 text-white text-sm font-bold rounded-2xl
               shadow-[0_20px_40px_-12px_rgba(37,99,235,0.4)] hover:bg-blue-700 

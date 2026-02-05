@@ -51,14 +51,14 @@ const DashboardIndex = () => {
       (item) => new Date(item.created_at).getFullYear() === currentYear,
     );
 
-    if (isSubmissionOpen)
-      return {
-        title: "Periode Ditutup",
-        desc: "Batas waktu pengumpulan dokumen telah berakhir.",
-        icon: AlertCircle,
-        variant: "danger",
-        link: null,
-      };
+    // if (isSubmissionOpen)
+    //   return {
+    //     title: "Periode Ditutup",
+    //     desc: "Batas waktu pengumpulan dokumen telah berakhir.",
+    //     icon: AlertCircle,
+    //     variant: "danger",
+    //     link: null,
+    //   };
 
     if (newsBerkas?.length > 0)
       return {
@@ -74,7 +74,7 @@ const DashboardIndex = () => {
       desc: "Periode baru telah dibuka. Segera unggah dokumen Anda.",
       icon: FileWarning,
       variant: "warn",
-      link: "/berkas/kenaikan-pangkat",
+      link: "/unggah-berkas",
     };
   }, [berkas, isSubmissionOpen, currentYear]);
 
@@ -146,7 +146,7 @@ const DashboardIndex = () => {
             description="Akses dokumen pengajuan dari tahun-tahun sebelumnya."
             icon={Eye}
             variant="info"
-            linkedTo="/arsip"
+            linkedTo="/arsip/kenaikan-pangkat"
           />
         </div>
       </section>
