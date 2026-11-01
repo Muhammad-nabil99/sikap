@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/utils/config";
 import { NewUser } from "../../user/userAPI";
 
 export interface InputBerkas {
@@ -33,7 +34,7 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_PNS_API<BERKAS_TYPE>() {
   const token = JSON.parse(getToken);
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pns`,
+      `${BASE_URL}/berkas/sk-pns`,
       {
         method: "GET",
         headers: {
@@ -60,7 +61,7 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(
   const token = JSON.parse(getToken);
   try {
     await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pns/update`,
+      `${BASE_URL}/berkas/sk-pns/update`,
       {
         method: "POST",
         credentials: "include",
@@ -82,7 +83,7 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_PNS_API(
   const token = JSON.parse(getToken);
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pns`,
+      `${BASE_URL}/berkas/sk-pns`,
       {
         method: "POST",
 

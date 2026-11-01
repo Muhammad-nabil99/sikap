@@ -1,3 +1,5 @@
+import { BASE_URL } from "@/utils/config";
+
 export interface BerkasKenaikanPangkatGajiBerkala {
   id: number;
   pegawais_id: number;
@@ -22,7 +24,7 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API() {
   
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-gaji-berkala`,
+      `${BASE_URL}/berkas/sk-gaji-berkala`,
       {
         method: "GET",
         headers: {
@@ -57,7 +59,7 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API(
   
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-gaji-berkala`,
+      `${BASE_URL}/berkas/sk-gaji-berkala`,
       {
         method: "POST",
         headers: {
@@ -93,7 +95,7 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_GAJI_BERKALA_API(
   
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-gaji-berkala/update`,
+      `${BASE_URL}/berkas/sk-gaji-berkala/update`,
       {
         method: "POST",
         credentials: "include",

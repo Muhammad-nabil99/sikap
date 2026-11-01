@@ -37,7 +37,7 @@ export async function getSK_API() {
   if (!getToken) return null;
   const token = JSON.parse(getToken);
   try {
-    const response = await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri`, {
+    const response = await fetch(`${BASE_URL}/pegawai/data-diri`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -58,7 +58,7 @@ export async function deleteSK_API(id: number) {
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
-    await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri/${id}`, {
+    await fetch(`${BASE_URL}/pegawai/data-diri/${id}`, {
       method: "DELETE",
       credentials: "include",
       headers: {
@@ -74,7 +74,7 @@ export async function updateSK_API(newData) {
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
-    await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri/${newData?.id}`, {
+    await fetch(`${BASE_URL}/pegawai/data-diri/${newData?.id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -93,7 +93,7 @@ export async function createSK_API(newData: CreateSKData) {
   const token = JSON.parse(getToken);
 
   try {
-    const response = await fetch(`https://dashboardsikap.btikpsultra.my.id/api/pegawai/data-diri`, {
+    const response = await fetch(`${BASE_URL}/pegawai/data-diri`, {
       method: "POST",
       credentials: "include",
       headers: {

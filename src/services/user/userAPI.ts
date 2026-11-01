@@ -29,7 +29,7 @@ export interface NewUser {
 export async function registerUserAPI(newUser: NewUser) {
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/register`,
+      `${BASE_URL}/register`,
       {
         method: "POST",
         headers: {
@@ -59,7 +59,9 @@ export async function registerUserAPI(newUser: NewUser) {
 
     console.log("data", data);
 
-    localStorage.setItem("token", data?.token);
+    if (data?.token) {
+      localStorage.setItem("token", JSON.stringify(data.token));
+    }
     return data;
   } catch (error) {
     console.log("tidak dapat melakukan registrasi");
@@ -70,7 +72,7 @@ export async function registerUserAPI(newUser: NewUser) {
 export async function loginUserAPI(user: { nip: number; password: string }) {
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/login`,
+      `${BASE_URL}/login`,
       {
         method: "POST",
         headers: {
@@ -86,14 +88,25 @@ export async function loginUserAPI(user: { nip: number; password: string }) {
     return data;
   } catch (error) {
     console.log("tidak dapat melakukan login", error.message);
+    throw error;
   }
 }
 export async function getUserAPI(): Promise<Pegawai> {
   const getToken = localStorage.getItem("token");
-  const token = JSON.parse(getToken);
+  if (!getToken || getToken === "undefined") {
+    throw new Error("Failed to login");
+  }
+  let token = getToken;
+  try {
+    token = JSON.parse(getToken);
+  } catch {
+    token = getToken;
+  }
+  if (!token) throw new Error("Failed to login");
+
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/pegawai/profile`,
+      `${BASE_URL}/pegawai/profile`,
       {
         method: "GET",
         headers: {
@@ -119,7 +132,7 @@ export async function updateUserAPI(newData: UpdateUserPayload) {
   const token = JSON.parse(localStorage.getItem("token") || "null");
 
   const response = await fetch(
-    `https://dashboardsikap.btikpsultra.my.id/api/pegawai/profile`,
+    `${BASE_URL}/pegawai/profile`,
     {
       method: "PUT",
       credentials: "include",
@@ -154,7 +167,7 @@ export async function logoutUserAPI() {
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/logout`,
+      `${BASE_URL}/logout`,
       {
         method: "POST",
         headers: {

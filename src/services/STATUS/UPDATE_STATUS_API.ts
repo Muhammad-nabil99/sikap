@@ -1,3 +1,5 @@
+import { BASE_URL } from "@/utils/config";
+
 type StatusPayload = {
   status: 0 | 1;
 };
@@ -5,7 +7,7 @@ type StatusPayload = {
 export async function UPDATE_STATUS_API(payload: StatusPayload) {
   const token = JSON.parse(localStorage.getItem("token") || "");
   const res = await fetch(
-    "https://dashboardsikap.btikpsultra.my.id/api/berkas/status",
+    `${BASE_URL}/berkas/status`,
     {
       method: "PUT",
       headers: {

@@ -7,20 +7,26 @@ function ProtectedRoutes({ children }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, isLoadingUser } = useGetUser();
+  const token = localStorage.getItem("token");
+  const isAuthenticated = Boolean(token && (user?.data || user));
 
   useEffect(() => {
     if (isLoadingUser) return;
 
-    if (!user?.data && isLoadingUser) {
-      navigate("/login");
+    if (!isAuthenticated) {
+      navigate("/login", { replace: true });
     }
 
-    if (pathname === "/login" && user?.data) {
+    if (pathname === "/login" && isAuthenticated) {
       navigate("/dashboard", { replace: true });
     }
-  }, [user, isLoadingUser, navigate, pathname]);
+  }, [isAuthenticated, isLoadingUser, navigate, pathname]);
+
+  if (!token) return <Navigate to="/login" replace />;
 
   if (isLoadingUser) return <LoadingDashboard />;
+
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   return children;
 }

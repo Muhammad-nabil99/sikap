@@ -306,14 +306,14 @@ export const Sidebar = () => {
       <SidebarFooter className="p-4 bg-slate-50/50 border-t border-slate-100">
         <div className="flex items-center gap-3 p-2">
           <div className="uppercase w-9 h-9 rounded-full bg-gradient-to-tr from-slate-200 to-slate-100 border-2 border-white shadow-sm flex items-center justify-center font-bold text-slate-600 text-xs">
-            {shortenName(user.data.nama) || "U"}
+            {shortenName(user?.data?.nama) || "U"}
           </div>
           <div className="flex-1 min-w-0">
             <p className="capitalize text-xs font-bold text-slate-800 truncate">
-              {user.data.nama}
+              {user?.data?.nama}
             </p>
             <p className="text-[10px] text-slate-500 font-medium truncate">
-              NIP. {user.data.nip}
+              NIP. {user?.data?.nip}
             </p>
           </div>
         </div>

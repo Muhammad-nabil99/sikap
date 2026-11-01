@@ -1,9 +1,11 @@
+import { BASE_URL } from "@/utils/config";
+
 export async function GET_STATUS_BERKAS_API() {
   const getToken = localStorage.getItem("token");
   const token = JSON.parse(getToken);
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/status`,
+      `${BASE_URL}/berkas/status`,
       {
         method: "GET",
         headers: {

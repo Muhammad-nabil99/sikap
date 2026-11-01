@@ -1,0 +1,14 @@
+services:
+  sikap-prod:
+    container_name: sikap-prod
+    build:
+      context: .
+      target: production
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_STORAGE_URL: ${VITE_STORAGE_URL}
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT:-80}:80"
+    restart: unless-stopped

@@ -1,3 +1,5 @@
+import { BASE_URL } from "@/utils/config";
+
 export interface BerkasKenaikanPangkatJabatan {
   id: number;
   pegawais_id: number;
@@ -22,7 +24,7 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_JABATAN_API() {
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-jabatan`,
+      `${BASE_URL}/berkas/sk-jabatan`,
       {
         method: "GET",
         headers: {
@@ -57,7 +59,7 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_JABATAN_API(
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-jabatan`,
+      `${BASE_URL}/berkas/sk-jabatan`,
       {
         method: "POST",
         headers: {
@@ -93,7 +95,7 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_JABATAN_API(
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-jabatan/update`,
+      `${BASE_URL}/berkas/sk-jabatan/update`,
 
       {
         method: "POST",

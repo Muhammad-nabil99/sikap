@@ -1,3 +1,5 @@
+import { BASE_URL } from "@/utils/config";
+
 // CPNS stores a SINGLE file, not an array
 export interface BerkasKenaikanPangkatCPNS {
   id: number;
@@ -22,7 +24,7 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_CPNS_API() {
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-cpns`,
+      `${BASE_URL}/berkas/sk-cpns`,
       {
         method: "GET",
         headers: {
@@ -56,7 +58,7 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-cpns`,
+      `${BASE_URL}/berkas/sk-cpns`,
       {
         method: "POST",
         headers: {
@@ -91,7 +93,7 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_CPNS_API(formData) {
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-cpns/update`,
+      `${BASE_URL}/berkas/sk-cpns/update`,
       {
         method: "POST",
         credentials: "include",

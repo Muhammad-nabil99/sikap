@@ -8,13 +8,17 @@ function useLoginUser() {
   const queryClient = useQueryClient();
   const { mutate: login, isPending } = useMutation({
     mutationFn: loginUserAPI,
-    onSuccess: (user) => {
+    onSuccess: async (user) => {
+      if (!user?.token) {
+        toast.error("User atau Password anda salah");
+        return;
+      }
       const { token } = user;
 
       localStorage.setItem("token", JSON.stringify(token));
       toast.success("Berhasil Login");
-      queryClient.setQueryData(["user"], user);
-      navigate("/dashboard");
+      await queryClient.resetQueries({ queryKey: ["user"] });
+      navigate("/dashboard", { replace: true });
     },
     onError: (error) => {
       toast.error("User atau Password anda salah");

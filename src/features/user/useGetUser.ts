@@ -7,7 +7,8 @@ function useGetUser() {
   const navigate = useNavigate();
   const {
     data: user,
-    isPending: isLoadingUser,
+    isPending,
+    isFetching,
     error,
   } = useQuery<Pegawai, Error>({
     queryFn: getUserAPI,
@@ -15,11 +16,13 @@ function useGetUser() {
     retry: false,
   });
 
+  const isLoadingUser = isPending || (isFetching && !user?.data);
+
   useEffect(() => {
-    if (error) {
-      navigate("/login");
+    if (error && !isFetching) {
+      navigate("/login", { replace: true });
     }
-  }, [error, navigate]);
+  }, [error, isFetching, navigate]);
 
   return { user, isLoadingUser };
 }

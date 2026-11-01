@@ -1,3 +1,5 @@
+import { BASE_URL } from "@/utils/config";
+
 // Interface for individual record
 export interface BerkasKenaikanPangkatPangkatTerakhir {
   id: number;
@@ -25,7 +27,7 @@ export async function GET_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API() {
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pangkat-terakhir`,
+      `${BASE_URL}/berkas/sk-pangkat-terakhir`,
       {
         method: "GET",
         headers: {
@@ -61,7 +63,7 @@ export async function CREATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API(
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pangkat-terakhir`,
+      `${BASE_URL}/berkas/sk-pangkat-terakhir`,
       {
         method: "POST",
         headers: {
@@ -98,7 +100,7 @@ export async function UPDATE_BERKAS_KENAIKAN_PANGKAT_PANGKAT_TERAKHIR_API(
 
   try {
     const response = await fetch(
-      `https://dashboardsikap.btikpsultra.my.id/api/berkas/sk-pangkat-terakhir/update`,
+      `${BASE_URL}/berkas/sk-pangkat-terakhir/update`,
       {
         method: "POST",
         credentials: "include",
